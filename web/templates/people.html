@@ -10,7 +10,7 @@
     <script src="/static/js/jquery.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
     <style type="text/css">
-      .navbar {
+/*      .navbar {
         min-height: 80px;
       }
       .navbar-brand {
@@ -27,7 +27,7 @@
       }
       .nav>li>a {
         padding: 10px 35px;
-      }
+      }*/
       .thumbnail>img {
         height: 200px;
       }
@@ -38,11 +38,11 @@
       .caption>center>p {
         font-size: 16px;
       }
-      footer {
+/*      footer {
         position: absolute;
         bottom: 0;
         width: 100%;
-      }
+      }*/
     </style>
     <script type="text/javascript">
       $(document).ready(function(){
@@ -56,11 +56,15 @@
     <nav class="navbar navbar-inverse">
       <div class="container">
         <div class="navbar-header">
+<button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu" aria-expanded="false">
+            <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+          </button>
           <a class="navbar-brand" href="/">
             <!-- <img src="http://mscoco.org/static/images/logo.jpg" height="100%"> -->
             Multimedia
           </a>
         </div>
+<div class="collapse navbar-collapse" id="menu">
         <ul class="nav navbar-nav navbar-right">
           <li><a href="/">Home</a></li>
           <li class="active"><a href="/people">People</a></li>
@@ -69,6 +73,7 @@
           <li><a href="/contact">Contact</a></li>
         </ul>
       </div>
+</div>
     </nav>
 
     <div class="container">
