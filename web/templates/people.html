@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN" style="overflow-y: visible;">
+  <head>
+    <title>Microsoft Multimedia Challenge</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <style type="text/css">
+      .navbar {
+        min-height: 80px;
+      }
+      .navbar-brand {
+        line-height: 60px;
+      }
+      .navbar-nav {
+        height: 80px;
+      }
+      .navbar-nav>li {
+        height: 80px;
+      }
+      .navbar-nav>li>a {
+        line-height: 60px;
+      }
+      .nav>li>a {
+        padding: 10px 35px;
+      }
+      .thumbnail>img {
+        height: 200px;
+      }
+      .thumbnail {
+        cursor: pointer;
+        height: 330px;
+      }
+      .caption>center>p {
+        font-size: 16px;
+      }
+      footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+      }
+    </style>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $(".thumbnail").click(function(){
+          window.location = $(this).attr("href");
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">
+            <!-- <img src="http://mscoco.org/static/images/logo.jpg" height="100%"> -->
+            Multimedia
+          </a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/">Home</a></li>
+          <li class="active"><a href="/people">People</a></li>
+          <li><a href="/challenge">Challenge</a></li>
+          <li><a href="/dataset">Dataset</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h3>Who is behind it?</h3>
+      <p style="color: gray;">(In alphabetical order of last name)</p>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="thumbnail" href="http://research.microsoft.com/en-us/people/tmei/">
+            <img src="/static/img/taomei.jpg">
+            <div class="caption">
+              <center>
+                <h3>Tao Mei</h3>
+                <p>Microsoft Research Asia</p>
+                <!-- <p><a href="http://research.microsoft.com/en-us/people/tmei/">http://research.microsoft.com/en-us/people/tmei/</a></p> -->
+              </center>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="thumbnail" href="http://research.microsoft.com/en-us/people/yongrui/">
+            <img src="/static/img/yongrui.jpg">
+            <div class="caption">
+              <center>
+                <h3>Yong Rui</h3>
+                <p>Microsoft Research Asia</p>
+                <!-- <p><a href="http://research.microsoft.com/en-us/people/yongrui/">http://research.microsoft.com/en-us/people/yongrui/</a></p> -->
+              </center>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="thumbnail" href="http://staff.ustc.edu.cn/~xinmei/Home/home.html">
+            <img src="/static/img/xinmeitian.jpg">
+            <div class="caption">
+              <center>
+                <h3>Xinmei Tian</h3>
+                <p>University of Science and Technology of China</p>
+                <!-- <p><a href="http://staff.ustc.edu.cn/~xinmei/Home/home.html">http://staff.ustc.edu.cn/~xinmei/Home/home.html</a></p> -->
+              </center>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="thumbnail" href="http://vireo.cs.cityu.edu.hk/TingYao/">
+            <img src="/static/img/tingyao.jpg">
+            <div class="caption">
+              <center>
+                <h3>Ting Yao</h3>
+                <p>Microsoft Research Asia</p>
+                <!-- <p><a  >http://vireo.cs.cityu.edu.hk/TingYao/</a></p> -->
+              </center>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <hr>
+      <span class="text-center help-block">
+        &copy Microsoft Research All rights reserved
+      </span>
+    </footer>
+  </body>
+</html>

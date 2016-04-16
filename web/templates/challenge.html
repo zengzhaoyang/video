@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN" style="overflow-y: visible;">
+  <head>
+    <title>Microsoft Multimedia Challenge</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/google-code-prettify/run_prettify.js"></script>
+    <script src="/static/js/sprintf.js"></script>
+    <style type="text/css">
+      .navbar {
+        min-height: 80px;
+      }
+      .navbar-brand {
+        line-height: 60px;
+      }
+      .navbar-nav {
+        height: 80px;
+      }
+      .navbar-nav>li {
+        height: 80px;
+      }
+      .navbar-nav>li>a {
+        line-height: 60px;
+      }
+      .nav>li>a {
+        padding: 10px 35px;
+      }
+      .jumbotron {
+        /*height: 600px;*/
+      }
+      .introduction {
+        font-size: 20px;
+      }
+
+    </style>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        var nowpage = "";
+        var nowtitle = "";
+        var nowmemberid = 0;
+
+        $.getJSON("/api/getinfo",function(data,status){
+          if(data.res=="00000") {
+            var addhtml='<div style="float:right">\
+                      <p style="font-size:16px;"><b>Welcome   %s</b></p>\
+                      <p>%s</p>\
+                      <button class="btn btn-default" id="logout" style="float:right">Logout</button>\
+                      <div style="float:right">&nbsp;&nbsp;</div>\
+                      <button class="btn btn-primary disabled" id="submit" style="float:right">Submit</button>\
+                    </div>';
+            var info=data.info;
+            var teamname=info.teamname;
+            var member=info.member;
+            var length=member.length;
+            var namelist=member[0].name
+            for (var i=1;i<length;i++) {
+              namelist = namelist + " " + member[i].name
+            }
+            $("#video-head").append(sprintf(addhtml, teamname, namelist));
+          }
+          else {
+            var addhtml='<button class="btn btn-primary" id="video_register" style="float:right;">Register</button>\
+                    <div style="float:right">&nbsp;&nbsp;</div>\
+                    <button class="btn btn-success" id="video_login" style="float:right;">Login</button>';
+            $("#video-head").append(addhtml);
+          }
+        });
+
+        $(document).on("click", "#video_login", function(){
+          nowpage = "video";
+          nowtitle = "Video to Language Challenge Login";
+          $("#login_title").text(nowtitle);
+          $("#login").modal("show");
+        });
+        $(document).on("click", "#video_register", function(){
+          nowpage = "video";
+          nowtitle = "Video to Language Challenge Register";
+          $("#register_title").text(nowtitle);
+          $("#register").modal("show");
+          $("#register_member").empty();
+          nowmemberid = 1;
+          $("input").val("");
+        });
+        $(document).on("click", "#addmember", function(){
+          var addhtml = '<div class="form-group" id="member%d">\
+                <label class="control-label">Member %d</label>\
+                <div class="row">\
+                  <div class="col-md-4">\
+                    <input type="text" class="form-control" id="member%d_name" placeholder="name">\
+                  </div>\
+                  <div class="col-md-4">\
+                    <input type="email" class="form-control" id="member%d_email" placeholder="email">\
+                  </div>\
+                  <div class="col-md-4">\
+                    <input type="text" class="form-control" id="member%d_organization" placeholder="organization">\
+                  </div>\
+                </div>\
+              </div>';
+          $("#register_member").append(sprintf(addhtml,nowmemberid,nowmemberid,nowmemberid,nowmemberid,nowmemberid));
+          nowmemberid++;
+        });
+        $(document).on("click", "#register_button", function(){
+
+          $(".has-error").find("span").remove();
+          $(".has-error").removeClass("has-error");
+          var flag = true;
+
+          var username = $("#username").val();
+          if(username == "") {
+            var parent = $("#username").parent();
+            var addhtml = '<span class="help-block">User name can not be empty</span>';
+            parent.append(addhtml);
+            parent.addClass("has-error");
+            flag = false;
+          }
+
+          var password = $("#password").val();
+          if(password == "") {
+            var parent = $("#password").parent();
+            var addhtml = '<span class="help-block">Password can not be empty</span>';
+            parent.append(addhtml);
+            parent.addClass("has-error");
+            flag = false;
+          }
+          else if(password.length<6){
+            var parent = $("#password").parent();
+            var addhtml = '<span class="help-block">The length of password should be longer than 6</span>';
+            parent.append(addhtml);
+            parent.addClass("has-error");
+            flag = false;
+          }
+
+          var password_repeat = $("#password-repeat").val();
+          if(password_repeat != password) {
+            var parent = $("#password-repeat").parent();
+            var addhtml = '<span class="help-block">The two passwords did not match</span>';
+            parent.append(addhtml);
+            parent.addClass("has-error");
+            flag = false;
+          }
+
+          var teamname = $("#teamname").val();
+          if(teamname == "") {
+            var parent = $("#teamname").parent();
+            var addhtml = '<span class="help-block">Team name can not be empty</span>';
+            parent.append(addhtml);
+            parent.addClass("has-error");
+            flag = false;
+          }
+
+          var caption_name = $("#caption_name").val();
+          var caption_email = $("#caption_email").val();
+          var caption_organization = $("#caption_organization").val();
+          if(caption_name==""||caption_email==""||caption_organization=="") {
+            var addhtml = '<span class="help-block">Please complete all the infomation</span>';
+            $("#caption").append(addhtml).addClass("has-error");
+            flag = false;
+          }
+
+          for(var i=1;i<nowmemberid;i++) {
+            var member_name = $(sprintf("#member%d_name",i)).val();
+            var member_email = $(sprintf("#member%d_email",i)).val();
+            var member_organization = $(sprintf("#member%d_organization",i)).val();
+            if(member_name==""||member_email==""||member_organization=="") {
+              var addhtml = '<span class="help-block">Please complete all the infomation</span>';
+              $(sprintf("#member%d",i)).append(addhtml).addClass("has-error");
+              flag = false;
+            }
+          }
+          if(flag==false)
+            return;
+
+          var para={
+            "challenge_type":nowpage,
+            "username":username,
+            "password":password,
+            "teamname":teamname,
+            "caption_name":caption_name,
+            "caption_email":caption_email,
+            "caption_organization":caption_organization,
+            "member_num":nowmemberid
+          }
+          for(var i=1;i<nowmemberid;i++){
+            var member_name = $(sprintf("#member%d_name",i)).val();
+            var member_email = $(sprintf("#member%d_email",i)).val();
+            var member_organization = $(sprintf("#member%d_organization",i)).val();
+            para[sprintf("member%d_name",i)]=member_name;
+            para[sprintf("member%d_email",i)]=member_email;
+            para[sprintf("member%d_organization",i)]=member_organization;
+          }
+
+          $(this).text("Registering...").addClass("disabled");
+          $.post("/api/register",para,function(data,status){
+            if(data.res=="00000"){
+              alert("register success");
+              window.location.reload();
+            }
+            else if(data.res=="10001"){
+              //
+            }
+            else if(data.res=="20001"){
+              var addhtml = '<span class="help-block">User name is unavailable</span>';
+              $("#username").parent().append(addhtml).addClass("has-error");
+            }
+            else if(data.res=="20002"){
+              var addhtml = '<span class="help-block">Team name is unavailable</span>';
+              $("#teamname").parent().append(addhtml).addClass("has-error");
+            }
+            else if(data.res=="20003"){
+              var place = data.place;
+              if(place==0){
+                var addhtml = '<span class="help-block">This member has been registered in another team</span>';
+                $("#caption").append(addhtml).addClass("has-error");
+              }
+              else{
+                var addhtml = '<span class="help-block">This member has been registered in another team</span>';
+                $(sprintf("#member%d",data.place)).append(addhtml).addClass("has-error");               
+              }
+            }
+            $("#register_button").text("Register").removeClass("disabled");
+          });
+
+        });
+        $(document).on("click", "#login_button", function(){
+          var flag = true;
+          var username=$("#login-username").val();
+          if(username == "") {
+            var parent = $("#login-username").parent();
+            var addhtml = '<span class="help-block">User name can not be empty</span>';
+            parent.append(addhtml);
+            parent.addClass("has-error");
+            flag = false;
+          }
+
+          var password=$("#login-password").val();
+          if(password == "") {
+            var parent = $("#login-password").parent();
+            var addhtml = '<span class="help-block">Password can not be empty</span>';
+            parent.append(addhtml);
+            parent.addClass("has-error");
+            flag = false;
+          }
+
+          if(flag==false){
+            return;
+          }
+          var para={
+            "challenge_type":nowpage,
+            "username":username,
+            "password":password
+          }
+          $.post("/api/login",para,function(data,status){
+            if(data.res=="00000") {
+              window.location.reload();
+            }
+            else if(data.res=="100001"){
+              //
+            }
+            else if(data.res=="30001") {
+              var addhtml = '<span class="help-block">Username or password error</span>';
+              $("#login-username").parent().append(addhtml).addClass("has-error");
+              $("#login-password").parent().append(addhtml).addClass("has-error");
+            }
+          });
+        });
+        $(document).on("focus","input",function(){
+          
+          $(".has-error").find("span").remove();
+          $(".has-error").removeClass("has-error");
+        });
+        $(document).on("click", "#logout", function(){
+          $.getJSON("/api/logout", function(data,status){
+            if(data.res=="00000"){
+              window.location.reload();
+            }
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">
+            <!-- <img src="http://mscoco.org/static/images/logo.jpg" height="155%"> -->
+            Multimedia
+          </a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/">Home</a></li>
+          <li><a href="/people">People</a></li>
+          <li class="active"><a href="/challenge">Challenge</a></li>
+          <li><a href="/dataset">Dataset</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+        
+      <div class="row">
+        <div class="col-md-3">
+          <br><br><br><br>
+          <div class="list-group">
+            <a href="#image" aria-controls="image" role="tab" data-toggle="tab" class="list-group-item disabled">
+              Image Retrieval Challenge
+            </a>
+            <a href="#fine" aria-controls="fine" role="tab" data-toggle="tab" class="list-group-item disabled">
+            Fine-grained Image Recognition Challenge
+            </a>
+            <a href="#video" aria-controls="video" role="tab" data-toggle="tab" class="list-group-item active">
+            Video to Language Challenge
+            </a>
+            <a href="#qa" aria-controls="qa" role="tab" data-toggle="tab" class="list-group-item disabled">
+            Multimedia Q&amp;A Challenge
+            </a>
+          </div>
+        </div>
+        <div class="col-md-9">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="video">
+                  <div id="video-head">
+                    <h1 style="display: inline;">
+                    Video to Language Challenge
+                    </h1>
+                    <!-- <div style="float:right">
+                      <h5>Welcome   HAHA</h5>
+                      <p>aaaa dddd dddd dddd dddd</p>
+                      <p style="float:right"><a id="logout">Logout</a></p>
+                    </div> -->
+                    <!-- <button class="btn btn-primary" id="video_register" style="float:right;">Register</button>
+                    <div style="float:right">&nbsp;&nbsp;</div>
+                    <button class="btn btn-success" id="video_login" style="float:right;">Login</button> -->
+                  </div>
+                </div>
+              <br>
+              <br>
+              <hr>
+
+              <h3>Overview</h3>
+              <br>
+              <p>Video has become ubiquitous on the Internet, broadcasting channels, as well as personal devices. This has encouraged the development of advanced techniques to analyze the semantic video content for a wide variety of applications. Recognition of videos has been a fundamental challenge of computer vision for decades. Previous research has predominantly focused on recognizing videos with a predefined yet very limited set of individual words. In this grand challenge, we go a step further and target for translating video content to a complete and natural sentence. Given an input video clip, the goal is to automatically generate a complete and natural sentence to describe video content, ideally encapsulating its most informative dynamics. </p>
+              <img src="/static/img/1.png" width="100%">
+              <br>
+              <hr>
+
+              <h3>Challenge</h3>
+              <br>
+              <p>To further motivate and challenge the academic and industrial research community, Microsoft will release Microsoft Research - Video to Text (MSR-VTT), a large-scale video benchmark to public for bridging video and language. The dataset contains 41.2 hours and 200K clip-sentence pairs in total, covering the most comprehensive categories and diverse visual content, and representing the largest dataset in terms of sentence and vocabulary. The dataset can be used to train and evaluate video to language tasks, and other tasks (e.g., video retrieval, event detection, video categorization, etc.) as well in the near future. This challenge allows to use external data to train and tune parameters of algorithms. Therefore, each submission must explicitly cite the kind of external data used in the submission file.
+              </p>
+              <br>
+              <hr>
+
+              <h3>Task Description</h3>
+              <br>
+              <p>This year we will focus on video to language task. Given an input video clip, the goal is to automatically generate a complete and natural sentence to describe video content, ideally encapsulating its most informative dynamics. 
+The contestants are asked to develop video to language system based on the MSR-VTT dataset provided by the Challenge (as training data) and any other public/private data to recognize a wide range of object, scene, event, etc., in the images/videos. For the evaluation purpose, a contesting system is asked to produce at least one sentence of the test videos. The accuracy will be evaluated against human pre-generated sentence(s) during evaluation stage.
+              </p>
+              <br>
+              <hr>
+
+              <h3>Important Dates</h3>
+              <br>
+              <p><b>&middot; April 15, 2015:</b> Dataset available for download (training and validation set)</p>
+              <p><b>&middot; May 31, 2015:</b> Test set available for download</p>
+              <p><b>&middot; June 10, 2015:</b> Results submission</p>
+              <p><b>&middot; June 11 ~ June 25, 2015</b> Objective evaluation and human evaluation</p>
+              <p><b>&middot; June 30, 2015</b> Evaluation results announce</p>
+              <p><b>&middot; July 6, 2015</b> Paper submission deadline (please follow the instructions on the main conference website)</p>
+              <br>
+              <hr>
+
+              <h3>Submission File</h3>
+              <br>
+              <p>To enter the competition, you need to create an account on <a>Evaluation Server</a>. This account allows you to upload your results to the server. Each team is allowed to submit the results of at most three runs and selects one run as the primary run of the submission, which will be measured for performance comparison across teams. Each run must be formatted in a JSON File as</p>
+              <pre class="prettyprint lang-py" class=>
+{
+  "version": "VERSION 1.2",
+  "result":[
+  {
+    "video_id": "video2218",
+    "caption": "a panel of people talk about things"
+  },
+  ...
+  {
+    "video_id": "video1835",
+    "caption": "a person is playing the piano"
+  }
+  ],
+  "external_data":{
+    "used": "true", # Boolean flag. True indicates used of external data.
+    "details": "First fully-connected layer from VGG-16 pre-trained on ILSVRC-2012 training set" # String with details of your external data.
+  }
+}
+
+              </pre>
+              <p><b>Note: </b>comments in <span class="com">brown</span> are illustrative and help us to provide inline detailed explanations. Please avoid them in your sumisions.</p>
+              <p>To help with better understanding the format of the submission text file, a sample submission can be seen <a href="/static/resource/result.zip">here</a>. Participants please strictly follow the submission format.</p>
+              <br>
+              <hr>
+
+              <h3>Evaluation Metric</h3>
+              <br>
+              <p>
+              The evaluation provided here can be used to obtain results on the testing set of MSR-VTT. It computes multiple common metrics, including BLEU@4, METEOR, ROUGE-L, and CIDEr. </p>
+              <p>
+In addition, we will carry out the human evaluation of the systems submitted to this challenge on a subset of the testing set. Human were asked to rank the generated sentences of the primary run from each team and a reference sentence from 1 to 5 (lower - better) with respect to the following criteria.
+              </p>
+              <p style="color:blue">
+              &nbsp;&nbsp;&nbsp;&nbsp;<b>&middot; </b>Coherence: judge the logic and readability of the sentence.
+              </p>
+              <p style="color:blue">
+              &nbsp;&nbsp;&nbsp;&nbsp;<b>&middot; </b>Relevance: whether the sentence contains the more relevant and important objects/actions/events in the video clip?
+              </p>
+              <p style="color:blue">
+              &nbsp;&nbsp;&nbsp;&nbsp;<b>&middot; </b>Helpful for blind (additional criteria): how helpful would the sentence be for a blind person to understand what is happening in this video clip?
+              </p>
+              <br>
+              <hr>
+
+              <h3>Participation</h3>
+              <br>
+              <p>
+              The Challenge is a team-based contest. Each team can have one or more members, and an individual cannot be a member of multiple teams. 
+              </p>
+              <p>
+At the end of the Challenge, all teams will be ranked based on both objective evaluation and human evaluation described above. The top three teams will receive award certificates and/or cash prizes (prize amounts TBD). At the same time, all accepted submissions are qualified for the conference’s grand challenge award competition. 
+              </p>
+              <br>
+              <hr>
+
+              <h3>Citations</h3>
+              <br>
+              <p>
+              If you intend to publish results that use the data and resources provided by this challenge, please include the following references:
+              </p>
+              <pre class="prettyprint lang-cv">
+@inproceedings{Xu:CVPR16,
+title={MSR-VTT: A Large Video Description Dataset for Bridging Video and Language},
+author={Jun Xu and Tao Mei and Ting Yao and Yong Rui},
+booktitle={Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+year={2016}}
+
+@inproceedings{Pan:CVPR16,
+title={Jointly Modeling Embedding and Translation to Bridge Video and Language},
+author={Yingwei Pan and Tao Mei and Ting Yao and Houqiang Li and Yong Rui},
+booktitle={Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+year={2016}}
+              </pre>
+                </div>
+              </div>
+              
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="register" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="register_title"></h4>
+          </div>
+          <div class="modal-body">
+            <form onsubmit="return false;">
+              <div class="form-group">
+                <label class="control-label" for="username">Username</label>
+                <input type="text" class="form-control" id="username">
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="password">Password</label>
+                <input type="password" class="form-control" id="password">
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="password-repeat">Password Repeat</label>
+                <input type="password" class="form-control" id="password-repeat">
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="teamname">Team Name</label>
+                <input type="text" class="form-control" id="teamname">
+              </div>
+              <div class="form-group" id="caption">
+                <label class="control-label" >Caption</label>
+                <div class="row">
+                  <div class="col-md-4">
+                    <input type="text" class="form-control" id="caption_name" placeholder="name">
+                  </div>
+                  <div class="col-md-4">
+                    <input type="email" class="form-control" id="caption_email" placeholder="email">
+                  </div>
+                  <div class="col-md-4">
+                    <input type="text" class="form-control" id="caption_organization" placeholder="organization">
+                  </div>
+                </div>
+              </div>
+              <div id="register_member">
+              </div>
+            </form>
+            <br>
+            <button class="btn btn-primary" id="addmember"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Add Member
+            </button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="register_button">Register</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="login" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="login_title"></h4>
+          </div>
+          <div class="modal-body">
+            <form onsubmit="return false;">
+              <!-- <div class="form-group">
+                <label class="control-label" for="username">Username</label>
+                <input type="text" class="form-control" id="username">
+              </div> -->
+              <div class="form-group">
+                <label class="control-label" for="login-username">Username</label>
+                <input type="text" class="form-control" id="login-username">
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="login-password">Password</label>
+                <input type="password" class="form-control" id="login-password">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-success" id="login_button">Login</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <hr>
+      <span class="text-center help-block">
+        &copy Microsoft Research All rights reserved
+      </span>
+    </footer>
+  </body>
+</html>
