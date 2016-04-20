@@ -15,7 +15,23 @@ def generate_session():
     return code
 
 def send_email(member):
-    pass
+    import requests
+    url = 'http://182.92.104.30/mail'
+    data = {
+        'fromuser':'MSChallenge <root@msmultimediachallenge.com>',
+        'touser':'tmei@microsoft.com',
+        'subject':'[MS Challenge Notice]',
+        'message':'No reply\nMS Multimedia Register\n'
+    }
+    mem = []
+    for item in member:
+        one = '%s %s %s\n'%(item['name'], item['email'], item['organization'])
+        mem.append(one)
+    data['message'] = data['message'] + ''.join(mem)
+    res = requests.post(url, data=data)
+    data['touser'] = 'tiyao@microsoft.com'
+    res = requests.post(url, data=data)
+
 
 def check_team_member(challenge_type, username, password, team_name, member):
 
