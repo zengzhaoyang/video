@@ -66,7 +66,7 @@ def register():
 			return jsonify(res=MEMBER_UNAVALIABLE, place=place)
 	else:
 		from lib import send_email
-		send_email(member)
+		#send_email(member)
 		resp = jsonify(res=SUCCESS)
 		resp.set_cookie('session', place)
 		return resp
@@ -116,4 +116,30 @@ def getinfo():
 
 @api.route('/submit', methods=['POST'])
 def submit():
-	return jsonify(res="00000")
+	cookies = request.cookies
+	if not 'session' in cookies:
+		return jsonify(res=NOT_LOGIN)
+	session = cookies['session']
+
+	from lib import get_teamid_by_session
+	teamid = get_teamid_by_session(session)
+	if teamid == None:
+		resp = jsonify(res=NOT_LOGIN)
+		resp.delete_cookie('session')
+		return resp 
+
+	teamid = teamid.replace('&', '_')
+
+	files = request.files
+	f = files['file']
+	filename = f.filename
+	filetype = filename.split('.')[-1]
+	filename = teamid + '.' + filetype
+	import os
+	os.system("rm tmp/%s*"%teamid)
+	f.save('tmp/' + filename)
+
+	from lib import team_submit
+	team_submit(teamid)
+
+	return jsonify(res=SUCCESS)
