@@ -18,7 +18,7 @@ def send_email(member):
     import requests
     url = 'http://182.92.104.30/mail'
     data = {
-        'fromuser':'MSChallenge <root@msmultimediachallenge.com>',
+        'fromuser':'MSChallenge <root@ms-multimedia-challenge.com>',
         'touser':'tmei@microsoft.com',
         'subject':'[MS Challenge Notice]',
         'message':'No reply\nMS Multimedia Register\n'
