@@ -52,10 +52,10 @@ def check_team_member(challenge_type, username, password, team_name, member):
                 return false, MEMBER_UNAVALIABLE, j
 
     register_member = db.register_member
-    for i in range(length):
-        one = register_member.find_one({'name':member[i]['name'], 'email':member[i]['email']})
-        if one != None:
-            return False, MEMBER_UNAVALIABLE, i
+    # for i in range(length):
+    #     one = register_member.find_one({'name':member[i]['name'], 'email':member[i]['email']})
+    #     if one != None:
+    #         return False, MEMBER_UNAVALIABLE, i
 
     _id = register_team.insert({
         'username':username,
@@ -63,21 +63,21 @@ def check_team_member(challenge_type, username, password, team_name, member):
         'teamname':team_name,
         'member':member})
     team_id = str(_id)
-    for i in range(length):
-        if i == 0:
-            register_member.insert({
-                'name':member[i]['name'],
-                'email':member[i]['email'],
-                'organization':member[i]['organization'],
-                'team_id':team_id,
-                'is_caption':True})
-        else:
-            register_member.insert({
-                'name':member[i]['name'],
-                'email':member[i]['email'],
-                'organization':member[i]['organization'],
-                'team_id':team_id,
-                'is_caption':False})
+    # for i in range(length):
+    #     if i == 0:
+    #         register_member.insert({
+    #             'name':member[i]['name'],
+    #             'email':member[i]['email'],
+    #             'organization':member[i]['organization'],
+    #             'team_id':team_id,
+    #             'is_caption':True})
+    #     else:
+    #         register_member.insert({
+    #             'name':member[i]['name'],
+    #             'email':member[i]['email'],
+    #             'organization':member[i]['organization'],
+    #             'team_id':team_id,
+    #             'is_caption':False})
 
     from model import RedisDB
     con = RedisDB().con
@@ -88,6 +88,31 @@ def check_team_member(challenge_type, username, password, team_name, member):
     con.expire(key, 7200)
 
     return True, SUCCESS, code
+
+def update_team_member(challenge_type, team_id, teamname, member):
+    from model import MongoDB
+    db = MongoDB().db
+    register_team = eval("db.%s"%challenge_type)
+    from bson import ObjectId
+    _id = ObjectId(team_id)
+    
+    length = len(member)
+    for i in range(length):
+        for j in range(i+1, length):
+            if member[i]['name'] == member[j]['name'] and member[i]['email'] == member[j]['email']:
+                return false, MEMBER_UNAVALIABLE, j
+    # for i in range(length):
+    #     one = register_member.find_one({'name':member[i]['name'], 'email':member[i]['email']})
+    #     if one != None and one['team_id'] != team_id:
+    #         return False, MEMBER_UNAVALIABLE, i
+
+    one = register_team.find_one({'_id':_id})
+    if one == None:
+        return False, TEAM_NOT_EXIST, 0
+
+    register_team.update({'_id':_id}, {'$set':{'teamname':teamname, 'member':member}})
+    return True, SUCCESS, 0
+
 
 def auth(challenge_type, username, password):
 
@@ -152,3 +177,20 @@ def team_submit(temp):
     register_team = eval("db.%s"%challenge_type)
     register_team.update({'_id':_id}, {'$set':{'hasSubmit':True}})
 
+def get_all_team(challenge_type):
+    from model import MongoDB
+    db = MongoDB().db
+    register_team = eval("db.%s"%challenge_type)
+    all_team = register_team.find()
+    res = []
+    for item in all_team:
+        temp = {
+            'teamname':item['teamname'],
+            'member':item['member'],
+        }
+        if 'hasSubmit' in item:
+            temp['hasSubmit'] = True
+        else:
+            temp['hasSubmit'] = False
+        res.append(temp)
+    return res

@@ -22,3 +22,14 @@ def dataset():
 @app.route('/contact', methods=['GET'])
 def external():
     return render_template('contact.html')
+
+@app.route('/browse', methods=['GET'])
+def browse():
+    args = request.args
+    if not 'token' in args:
+        return ''
+    token = args['token']
+    if token == 'msramsmbest':
+        return render_template('browse.html')
+    else:
+        return ''

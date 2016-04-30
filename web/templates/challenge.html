@@ -12,27 +12,6 @@
     <script src="/static/js/google-code-prettify/run_prettify.js"></script>
     <script src="/static/js/sprintf.js"></script>
     <style type="text/css">
-/*      .navbar {
-        min-height: 80px;
-      }
-      .navbar-brand {
-        line-height: 60px;
-      }
-      .navbar-nav {
-        height: 80px;
-      }
-      .navbar-nav>li {
-        height: 80px;
-      }
-      .navbar-nav>li>a {
-        line-height: 60px;
-      }
-      .nav>li>a {
-        padding: 10px 35px;
-      }*/
-      .jumbotron {
-        /*height: 600px;*/
-      }
       .introduction {
         font-size: 20px;
       }
@@ -43,7 +22,8 @@
         var nowpage = "";
         var nowtitle = "";
         var nowmemberid = 0;
-
+        var teamname;
+        var member;
         $.getJSON("/api/getinfo",function(data,status){
           if(data.res=="00000") {
             var addhtml='<div style="float:right">\
@@ -52,10 +32,12 @@
                       <button class="btn btn-default" id="logout" style="float:right">Logout</button>\
                       <div style="float:right">&nbsp;&nbsp;</div>\
                       <button class="btn btn-primary" id="submit" style="float:right">%s</button>\
+                      <div style="float:right">&nbsp;&nbsp;</div>\
+                      <button class="btn btn-info" id="update" style="float:right">Update</button>\
                     </div>';
             var info=data.info;
-            var teamname=info.teamname;
-            var member=info.member;
+            teamname=info.teamname;
+            member=info.member;
             var length=member.length;
             var namelist=member[0].name
             for (var i=1;i<length;i++) {
@@ -70,7 +52,8 @@
           else {
             var addhtml='<button class="btn btn-primary" id="video_register" style="float:right;">Register</button>\
                     <div style="float:right">&nbsp;&nbsp;</div>\
-                    <button class="btn btn-success" id="video_login" style="float:right;">Login</button>';
+                    <button class="btn btn-success" id="video_login" style="float:right;">Login</button>\
+                    ';
             $("#video-head").append(addhtml);
           }
         });
@@ -107,6 +90,12 @@
               </div>';
           $("#register_member").append(sprintf(addhtml,nowmemberid,nowmemberid,nowmemberid,nowmemberid,nowmemberid));
           nowmemberid++;
+        });
+        $(document).on("click", "#deletemember", function(){
+          if(nowmemberid==1)
+            return;
+          $(sprintf("#member%d",nowmemberid-1)).remove();
+          nowmemberid--;
         });
         $(document).on("click", "#register_button", function(){
 
@@ -348,6 +337,142 @@
             }
           })
         });
+
+        $(document).on("click", "#update", function(){
+          nowpage = "video";
+          $("#update-modal").modal("show");
+          $("#update-teamname").val(teamname);
+          $("#update-caption-name").val(member[0].name);
+          $("#update-caption-email").val(member[0].email);
+          $("#update-caption-organization").val(member[0].organization);
+          var length = member.length;
+          nowmemberid = 1;
+          var addhtml = '<div class="form-group" id="update-member%d">\
+                <label class="control-label">Member %d</label>\
+                <div class="row">\
+                  <div class="col-md-4">\
+                    <input type="text" class="form-control" id="update-member%d_name" placeholder="name">\
+                  </div>\
+                  <div class="col-md-4">\
+                    <input type="email" class="form-control" id="update-member%d_email" placeholder="email">\
+                  </div>\
+                  <div class="col-md-4">\
+                    <input type="text" class="form-control" id="update-member%d_organization" placeholder="organization">\
+                  </div>\
+                </div>\
+              </div>';
+          while (nowmemberid < length) {
+            $("#update-member").append(sprintf(addhtml, nowmemberid, nowmemberid, nowmemberid, nowmemberid, nowmemberid));
+            $(sprintf("#update-member%d_name", nowmemberid)).val(member[nowmemberid].name);
+            $(sprintf("#update-member%d_email", nowmemberid)).val(member[nowmemberid].email);
+            $(sprintf("#update-member%d_organization", nowmemberid)).val(member[nowmemberid].organization);
+            nowmemberid++;
+          }
+        });
+        $(document).on("click", "#update-addmember", function(){
+          var addhtml = '<div class="form-group" id="update-member%d">\
+                <label class="control-label">Member %d</label>\
+                <div class="row">\
+                  <div class="col-md-4">\
+                    <input type="text" class="form-control" id="update-member%d_name" placeholder="name">\
+                  </div>\
+                  <div class="col-md-4">\
+                    <input type="email" class="form-control" id="update-member%d_email" placeholder="email">\
+                  </div>\
+                  <div class="col-md-4">\
+                    <input type="text" class="form-control" id="update-member%d_organization" placeholder="organization">\
+                  </div>\
+                </div>\
+              </div>';
+          $("#update-member").append(sprintf(addhtml,nowmemberid,nowmemberid,nowmemberid,nowmemberid,nowmemberid));
+          nowmemberid++;
+        });
+        $(document).on("click", "#update-deletemember", function(){
+          if(nowmemberid==1)
+            return;
+          $(sprintf("#update-member%d",nowmemberid-1)).remove();
+          nowmemberid--;
+        });
+        $(document).on("click", "#update_button", function(){
+          $(".has-error").find("span").remove();
+          $(".has-error").removeClass("has-error");
+          var flag = true;
+
+          var teamname = $("#update-teamname").val();
+          if (teamname == "") {
+            var parent = $("#update-teamname").parent();
+            var addhtml = '<span class="help-block">Team name can not be empty</span>';
+            parent.append(addhtml);
+            parent.addClass("has-error");
+            flag = false;
+          }
+
+          var caption_name = $("#update-caption-name").val();
+          var caption_email = $("#update-caption-email").val();
+          var caption_organization = $("#update-caption-organization").val();
+          if(caption_name==""||caption_email==""||caption_organization=="") {
+            var addhtml = '<span class="help-block">Please complete all the infomation</span>';
+            $("#update-caption").append(addhtml).addClass("has-error");
+            flag = false;
+          }
+
+          for(var i=1;i<nowmemberid;i++) {
+            var member_name = $(sprintf("#update-member%d_name",i)).val();
+            var member_email = $(sprintf("#update-member%d_email",i)).val();
+            var member_organization = $(sprintf("#update-member%d_organization",i)).val();
+            if(member_name==""||member_email==""||member_organization=="") {
+              var addhtml = '<span class="help-block">Please complete all the infomation</span>';
+              $(sprintf("#member%d",i)).append(addhtml).addClass("has-error");
+              flag = false;
+            }
+          }
+          if(flag==false)
+            return;
+
+          var para={
+            "challenge_type":nowpage,
+            "teamname":teamname,
+            "caption_name":caption_name,
+            "caption_email":caption_email,
+            "caption_organization":caption_organization,
+            "member_num":nowmemberid
+          }
+          for(var i=1;i<nowmemberid;i++){
+            var member_name = $(sprintf("#update-member%d_name",i)).val();
+            var member_email = $(sprintf("#update-member%d_email",i)).val();
+            var member_organization = $(sprintf("#update-member%d_organization",i)).val();
+            para[sprintf("member%d_name",i)]=member_name;
+            para[sprintf("member%d_email",i)]=member_email;
+            para[sprintf("member%d_organization",i)]=member_organization;
+          }
+
+          $(this).text("Updating...").addClass("disabled");
+          $.post("/api/update",para,function(data,status){
+            if(data.res=="00000"){
+              alert("update success");
+              window.location.reload();
+            }
+            else if(data.res=="10001"){
+              //
+            }
+            else if(data.res=="20002"){
+              var addhtml = '<span class="help-block">Team name is unavailable</span>';
+              $("#update-teamname").parent().append(addhtml).addClass("has-error");
+            }
+            else if(data.res=="20003"){
+              var place = data.place;
+              if(place==0){
+                var addhtml = '<span class="help-block">This member has been registered in another team</span>';
+                $("#update-caption").append(addhtml).addClass("has-error");
+              }
+              else{
+                var addhtml = '<span class="help-block">This member has been registered in another team</span>';
+                $(sprintf("#update-member%d",data.place)).append(addhtml).addClass("has-error");               
+              }
+            }
+            $("#update_button").text("Update ").removeClass("disabled");
+          });
+        });
       });
     </script>
   </head>
@@ -421,7 +546,57 @@
               <h3>Overview</h3>
               <br>
               <p>Video has become ubiquitous on the Internet, broadcasting channels, as well as personal devices. This has encouraged the development of advanced techniques to analyze the semantic video content for a wide variety of applications. Recognition of videos has been a fundamental challenge of computer vision for decades. Previous research has predominantly focused on recognizing videos with a predefined yet very limited set of individual words. In this grand challenge, we go a step further and target for translating video content to a complete and natural sentence. Given an input video clip, the goal is to automatically generate a complete and natural sentence to describe video content, ideally encapsulating its most informative dynamics. </p>
-              <img src="/static/img/1.png" width="100%">
+              <div class="row">
+                <div class="col-md-4">
+                  <img src="/static/img/image1.gif" width="100%" height="170px">
+                  <span style="font-size:10px">1. A black and white horse runs around.</span><br>
+                  <span style="font-size:10px">2. A horse galloping through an open field.</span><br>
+                  <span style="font-size:10px">3. A horse is running around in green lush grass.</span><br>
+                  <span style="font-size:10px">4. There is a horse running on the grassland.</span><br>
+                  <span style="font-size:10px">5. A horse is riding in the grass.</span>
+                </div>
+                <div class="col-md-4">
+                  <img src="/static/img/image2.gif" width="100%" height="170px">
+                  <span style="font-size:10px">1. A woman giving speech on news channel.</span><br>
+                  <span style="font-size:10px">2. Hillary Clinton gives a speech.</span><br>
+                  <span style="font-size:10px">3. Hillary Clinton is making a speech at the conference of mayors.</span><br>
+                  <span style="font-size:10px">4. A woman is giving a speech on stage.</span><br>
+                  <span style="font-size:10px">5. A lady speak some news on TV.</span>
+                </div>
+                <div class="col-md-4">
+                  <img src="/static/img/image3.gif" width="100%" height="170px">
+                  <span style="font-size:10px">1. A child is cooking in the kitchen.</span><br>
+                  <span style="font-size:10px">2. A girl is putting her finger into a plastic cup containing an egg.</span><br>
+                  <span style="font-size:10px">3. Children boil water and get egg whites ready.</span><br>
+                  <span style="font-size:10px">4. People make food in a kitchen.</span><br>
+                  <span style="font-size:10px">5. A group of people are making food in a kitchen.</span>
+
+                </div>
+                <div class="col-md-4">
+                  <img src="/static/img/image4.gif" width="100%" height="170px">
+                  <span style="font-size:10px">1. A man and a woman performing a musical.</span><br>
+                  <span style="font-size:10px">2. A teenage couple perform in an amateur musical.</span><br>
+                  <span style="font-size:10px">3. Dancers are playing a routine.</span><br>
+                  <span style="font-size:10px">4. People are dancing in a musical.</span><br>
+                  <span style="font-size:10px">5. Some people are acting and singing for performance.</span>
+                </div>
+                <div class="col-md-4">
+                  <img src="/static/img/image5.gif" width="100%" height="170px">
+                  <span style="font-size:10px">1. A white car is drifting.</span><br>
+                  <span style="font-size:10px">2. Cars racing on a road surrounded by lots of people.</span><br>
+                  <span style="font-size:10px">3. Cars are racing down a narrow road.</span><br>
+                  <span style="font-size:10px">4. A race car races along a track.</span><br>
+                  <span style="font-size:10px">5. A car is drifting in a fast speed.</span>
+                </div>
+                <div class="col-md-4">
+                  <img src="/static/img/image6.gif" width="100%" height="170px">
+                  <span style="font-size:10px">1. A player is putting the basketball into the post from distance.</span><br>
+                  <span style="font-size:10px">2. The player makes a three-pointer.</span><br>
+                  <span style="font-size:10px">3. People are playing basketball.</span><br>
+                  <span style="font-size:10px">4. A 3 point shot by someone in a basketball race.</span><br>
+                  <span style="font-size:10px">5. A basketball team is playing in front of speculators.</span>
+                </div>
+              </div>
               <br>
               <hr>
 
@@ -584,6 +759,9 @@ year={2016}}
             <br>
             <button class="btn btn-primary" id="addmember"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Add Member
             </button>
+            &nbsp;
+            <button class="btn btn-danger" id="deletemember"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span>&nbsp;Delete Member
+            </button>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -642,6 +820,51 @@ year={2016}}
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             <button type="button" class="btn btn-success" id="submit_button">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="update-modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Team Infomation Update</h4>
+          </div>
+          <div class="modal-body">
+            <form onsubmit="return false;">
+              <div class="form-group">
+                <label class="control-lable" for="update-teamname">Team Name</label>
+                <input type="text" class="form-control" id="update-teamname">
+              </div>
+              <div class="form-group" id="update-caption">
+                <label class="control-label">Caption</label>
+                <div class="row">
+                  <div class="col-md-4">
+                    <input type="text" class="form-control" id="update-caption-name" placeholder="name">
+                  </div>
+                  <div class="col-md-4">
+                    <input type="email" class="form-control" id="update-caption-email" placeholder="email">
+                  </div>
+                  <div class="col-md-4">
+                    <input type="email" class="form-control" id="update-caption-organization" placeholder="organization">
+                  </div>
+                </div>
+                <div id="update-member">
+                </div>
+              </div>
+            </form>
+            <br>
+            <button class="btn btn-primary" id="update-addmember"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Add Member
+            </button>
+            &nbsp;
+            <button class="btn btn-danger" id="update-deletemember"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span>&nbsp;Delete Member
+            </button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="update_button">Update</button>
           </div>
         </div>
       </div>
