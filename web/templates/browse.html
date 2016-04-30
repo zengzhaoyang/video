@@ -33,9 +33,11 @@
               </td>\
               <td>%s\
               </td>\
+              <td>%s\
+              </td>\
               </tr>\
               ';
-              var caption_text = sprintf("%s  %s  %s", member[0].name, member[0].email, member[0].organization);
+              var caption_text = sprintf('%s  &lt;<a href="mailto:%s">%s</a>&gt;', member[0].name, member[0].email, member[0].email);
               var hasSubmit_text;
               if (hasSubmit == true) {
                 hasSubmit_text = "Yes";
@@ -50,7 +52,7 @@
                 var organization = member[j].organization;
                 member_text = member_text + sprintf("[ %s  %s  %s]   ", name, email, organization);
               }
-              $("#table").append(sprintf(addhtml, teamname, caption_text, member_text, hasSubmit_text));
+              $("#table").append(sprintf(addhtml, teamname, caption_text, member[0].organization, member_text, hasSubmit_text));
             }
           }
         });
@@ -66,6 +68,9 @@
         </th>
         <th>
           Caption
+        </th>
+        <th>
+          Organization
         </th>
         <th>
           Member
