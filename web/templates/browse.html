@@ -25,6 +25,8 @@
               var hasSubmit = team[i].hasSubmit;
               var addhtml = '\
               <tr>\
+              <td>%d\
+              </td>\
               <td>%s\
               </td>\
               <td>%s\
@@ -52,7 +54,7 @@
                 var organization = member[j].organization;
                 member_text = member_text + sprintf("[ %s  %s  %s]   ", name, email, organization);
               }
-              $("#table").append(sprintf(addhtml, teamname, caption_text, member[0].organization, member_text, hasSubmit_text));
+              $("#table").append(sprintf(addhtml, i, teamname, caption_text, member[0].organization, member_text, hasSubmit_text));
             }
           }
         });
@@ -63,6 +65,7 @@
     <table class="table table-striped">
       <tbody id="table">
       <tr>
+        <th>ID</th>
         <th>
           Team Name
         </th>
