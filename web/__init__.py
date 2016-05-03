@@ -33,3 +33,12 @@ def browse():
         return render_template('browse.html')
     else:
         return ''
+
+@app.route('/reset', methods=['GET'])
+def reset():
+    args = request.args
+    if not 'token' in args or not 'challenge_type' in args:
+        return ''
+    token = args['token']
+    challenge_type = args['challenge_type']
+    return render_template('reset.html', token=token, challenge_type=challenge_type)

@@ -62,6 +62,8 @@
           nowpage = "video";
           nowtitle = "Video to Language Challenge Login";
           $("#login_title").text(nowtitle);
+          $(".login-main").show();
+          $(".login-forget").hide();
           $("#login").modal("show");
         });
         $(document).on("click", "#video_register", function(){
@@ -473,6 +475,65 @@
             $("#update_button").text("Update ").removeClass("disabled");
           });
         });
+        $(document).on("click", "#login-forget-btn", function(){
+          $(".login-forget").show();
+          $(".login-main").hide();
+        });
+        $(document).on("click", "#login-forget-send", function(){
+          $(".has-error").find("span").remove();
+          $(".has-error").removeClass("has-error");
+          var flag = true;
+
+          var team_name = $("#login-forget-teamname").val();
+          if (team_name == "") {
+            var parent = $("#login-forget-caption").parent();
+            var addhtml = '<span class="help-block">Team name can not be empty</span>';
+            parent.append(addhtml);
+            parent.addClass("has-error");
+            flag = false;
+          }
+
+          var caption_name = $("#login-forget-caption").val();
+          if (caption_name == "") {
+            var parent = $("#login-forget-caption").parent();
+            var addhtml = '<span class="help-block">Cpation name can not be empty</span>';
+            parent.append(addhtml);
+            parent.addClass("has-error");
+            flag = false;
+          }
+
+          var caption_email = $("#login-forget-caption-email").val();
+          if (caption_email == "") {
+            var parent = $("#login-forget-caption-email").parent();
+            var addhtml = '<span class="help-block">Cpation email can not be empty</span>';
+            parent.append(addhtml);
+            parent.addClass("has-error");
+            flag = false;
+          }
+
+          if (flag == false)
+            return;
+
+          var para = {
+            "challenge_type":nowpage,
+            "team_name":team_name,
+            "caption_name":caption_name,
+            "caption_email":caption_email
+          }
+          $.post("/api/changepassword", para, function(data, status){
+            if (data.res=="00000") {
+              alert(sprintf("We have sent an reset email to %s, please check it", caption_email))
+              $("#login").modal('hide')
+            }
+            else if (data.res=="10001") {
+              //
+            }
+            else if (data.res=="60001") {
+              alert("Team Name does not match to Caption Information")
+            }
+          });
+
+        });
       });
     </script>
   </head>
@@ -780,19 +841,34 @@ year={2016}}
           </div>
           <div class="modal-body">
             <form onsubmit="return false;">
-              <div class="form-group">
+              <div class="form-group login-main">
                 <label class="control-label" for="login-username">Username</label>
                 <input type="text" class="form-control" id="login-username">
               </div>
-              <div class="form-group">
+              <div class="form-group login-main">
                 <label class="control-label" for="login-password">Password</label>
                 <input type="password" class="form-control" id="login-password">
               </div>
+              <div class="form-group login-forget" style="display: none">
+                <label class="control-label" for="login-forget-teamname">Team Name</label>
+                <input type="text" class="form-control" id="login-forget-teamname">
+              </div>
+              <div class="form-group login-forget" style="display: none;">
+                <label class="control-label" for="login-forget-caption">Caption Name</label>
+                <input type="text" class="form-control" id="login-forget-caption">
+              </div>
+              <div class="form-group login-forget" style="display: none;">
+                <label class="control-label" for="login-forget-caption-email">Caption Email</label>
+                <input type="email" class="form-control" id="login-forget-caption-email">
+              </div>
+              <br>
+              <a id="login-forget-btn" style="cursor:pointer;">Forget Password?</a>
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-success" id="login_button">Login</button>
+            <button type="button" class="btn btn-success login-main" id="login_button">Login</button>
+            <button type="button" class="btn btn-success login-forget" id="login-forget-send" style="display: none">Send</button>
           </div>
         </div>
       </div>

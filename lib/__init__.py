@@ -194,3 +194,80 @@ def get_all_team(challenge_type):
             temp['hasSubmit'] = False
         res.append(temp)
     return res
+
+def check_and_send_reset_password_email(challenge_type, team_name, caption_name, caption_email):
+    from model import MongoDB
+    db = MongoDB().db
+    register_team = eval("db.%s"%challenge_type)
+    one = register_team.find_one({'teamname':team_name})
+    if one == None:
+        return False
+    member = one['member']
+    if member[0]['name'] == caption_name and member[0]['email'] == caption_email:
+        code = generate_session()
+        from model import RedisDB
+        con = RedisDB().con
+        con.set('session2password:' + code, str(one['_id']))
+        con.expire('session2password:' + code, 600)
+
+        import requests
+        url = 'http://182.92.104.30/mail'
+        data = {
+            'fromuser':'MSChallenge <root@ms-multimedia-challenge.com>',
+            'touser':caption_email,
+            'subject':'[MS Challenge Notice]',
+            'message':'No reply\nClick the following to reset the password in 10 minutes.\nhttp://202.38.69.241/reset?token=%s&challenge_type=video'%code
+        }
+        print data
+        res = requests.post(url, data=data)
+        print res.text
+        return True
+    else:
+        return False
+
+def get_reset_info_by_token(token, challenge_type):
+    from model import RedisDB
+    con = RedisDB().con
+    teamid = con.get('session2password:' + token)
+    if teamid == None:
+        return False, ''
+    from bson import ObjectId
+    _id = ObjectId(teamid)
+    from model import MongoDB
+    db = MongoDB().db
+    register_team = eval("db.%s"%challenge_type)
+    one = register_team.find_one({'_id':_id})
+    if one == None:
+        return False, ''
+    else:
+        info = {}
+        info['username'] = one['username']
+        info['teamname'] = one['teamname']
+        info['captionname'] = one['member'][0]['name']
+        return True, info
+
+def reset_password_by_token(challenge_type, token, username, teamname, captionname, password):
+    from model import RedisDB
+    con = RedisDB().con
+    teamid = con.get('session2password:' + token)
+    if teamid == None:
+        return False, ''
+    from bson import ObjectId
+    _id = ObjectId(teamid)
+
+    from model import MongoDB
+    db = MongoDB().db
+    register_team = eval("db.%s"%challenge_type)
+    one = register_team.find_one({'_id':_id})
+    if one == None:
+        return False, ''
+    else:
+        if one['username'] != username or one['teamname'] != teamname or one['member'][0]['name'] != captionname:
+            return False, ''
+        register_team.update({'_id':_id}, {'$set':{'password':password}})
+        code = generate_session()
+        key = 'session2teamid:' + code
+        value = teamid + '&' +challenge_type
+        con.set(key, value)
+        con.expire(key, 7200)
+        return True, teamid

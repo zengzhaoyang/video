@@ -219,3 +219,63 @@ def allteam():
 	from lib import get_all_team
 	team = get_all_team(challenge_type)
 	return jsonify(res=SUCCESS, team=team)
+
+@api.route('/changepassword', methods=['POST'])
+def changepassword():
+	form = request.form
+	required = ['challenge_type', 'team_name', 'caption_name', 'caption_email']
+	for item in required:
+		if not item in required:
+			return jsonify(res=PARAMETER_ERROR)
+
+	challenge_type = form['challenge_type']
+	team_name = form['team_name']
+	caption_name = form['caption_name']
+	caption_email = form['caption_email']
+
+	from lib import check_and_send_reset_password_email
+	status = check_and_send_reset_password_email(challenge_type, team_name, caption_name, caption_email)
+	if status == True:
+		return jsonify(res=SUCCESS)
+	else:
+		return jsonify(res=CAPTION_NAME_EMAIL_NOT_MATCH)
+
+@api.route('/getresetinfo', methods=['GET'])
+def getresetinfo():
+	args = request.args
+	if not 'token' in args or not 'challenge_type' in args:
+		return jsonify(res=PARAMETER_ERROR)
+
+	token = args['token']
+	challenge_type = args['challenge_type']
+
+	from lib import get_reset_info_by_token
+	status, info = get_reset_info_by_token(token, challenge_type)
+	if status == True:
+		return jsonify(res=SUCCESS, info=info)
+	else:
+		return jsonify(res=INVALID_TOKEN)
+
+@api.route('/reset', methods=['POST'])
+def reset():
+	form = request.form
+	required = ['challenge_type', 'token', 'username', 'teamname', 'captionname', 'password']
+	for item in required:
+		if not item in required:
+			return jsonify(res=PARAMETER_ERROR)
+
+	challenge_type = form['challenge_type']
+	token = form['token']
+	username = form['username']
+	teamname = form['teamname']
+	captionname = form['captionname']
+	password = form['password']
+
+	from lib import reset_password_by_token
+	status, code = reset_password_by_token(challenge_type, token, username, teamname, captionname, password)
+	if status == True:
+		resp = jsonify(res=SUCCESS)
+		resp.set_cookie('session', code)
+		return resp
+	else:
+		return jsonify(res=INVALID_TOKEN)
