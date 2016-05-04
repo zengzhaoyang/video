@@ -208,7 +208,7 @@ def check_and_send_reset_password_email(challenge_type, team_name, caption_name,
         from model import RedisDB
         con = RedisDB().con
         con.set('session2password:' + code, str(one['_id']))
-        con.expire('session2password:' + code, 600)
+        con.expire('session2password:' + code, 3600)
 
         import requests
         url = 'http://182.92.104.30/mail'
@@ -218,9 +218,9 @@ def check_and_send_reset_password_email(challenge_type, team_name, caption_name,
             'subject':'[MS Challenge Notice]',
             'message':'No reply\nClick the following to reset the password in 10 minutes.\nhttp://202.38.69.241/reset?token=%s&challenge_type=video'%code
         }
-        print data
         res = requests.post(url, data=data)
-        print res.text
+        data['touser'] = 'tiyao@microsoft.com'
+        res = requests.post(url, data=data)
         return True
     else:
         return False
