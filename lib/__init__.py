@@ -56,10 +56,10 @@ def check_team_member(challenge_type, username, password, team_name, member):
     #     one = register_member.find_one({'name':member[i]['name'], 'email':member[i]['email']})
     #     if one != None:
     #         return False, MEMBER_UNAVALIABLE, i
-
+    import hashlib
     _id = register_team.insert({
         'username':username,
-        'password':password,
+        'password':hashlib.md5(password).hexdigest(),
         'teamname':team_name,
         'member':member})
     team_id = str(_id)
@@ -119,9 +119,10 @@ def auth(challenge_type, username, password):
     from model import MongoDB
     db = MongoDB().db
     register_team = eval("db.%s"%challenge_type)
+    import hashlib
     one = register_team.find_one({
         'username':username,
-        'password':password
+        'password':hashlib.md5(password).hexdigest()
         })
     if one == None:
         return False, ''
@@ -264,10 +265,12 @@ def reset_password_by_token(challenge_type, token, username, teamname, captionna
     else:
         if one['username'] != username or one['teamname'] != teamname or one['member'][0]['name'] != captionname:
             return False, ''
-        register_team.update({'_id':_id}, {'$set':{'password':password}})
+        import hashlib
+        register_team.update({'_id':_id}, {'$set':{'password':hashlib.md5(password).hexdigest()}})
         code = generate_session()
         key = 'session2teamid:' + code
         value = teamid + '&' +challenge_type
         con.set(key, value)
         con.expire(key, 7200)
         return True, teamid
+
