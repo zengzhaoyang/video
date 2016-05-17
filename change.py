@@ -10,4 +10,4 @@ register_team = db.video
 a = register_team.find()
 import hashlib
 for item in a:
-	register_team.update(item, {'$set':{'password':hashlib.md5(item['password']).hexdigest()}})
+	register_team.update_one(item, {'$set':{'password':hashlib.md5(item['password']).hexdigest()}})
