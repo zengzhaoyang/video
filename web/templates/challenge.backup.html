@@ -31,13 +31,7 @@
                       <p>%s</p>\
                       <button class="btn btn-default" id="logout" style="float:right">Logout</button>\
                       <div style="float:right">&nbsp;&nbsp;</div>\
-                      <div class="dropdown" style="float:right" >\
-                      <button id="submit-menu" class="btn btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Submit<span class="caret"></span></button>\
-                      <ul class="dropdown-menu" aria-labelledby="submit-menu">\
-                      <li><a id="submit" style="cursor:pointer;">%s</a></li>\
-                      <li><a id="submit_report" style="cursor:pointer;">%s</a></li>\
-                      </ul>\
-                      </div>\
+                      <button class="btn btn-primary" id="submit" style="float:right">%s</button>\
                       <div style="float:right">&nbsp;&nbsp;</div>\
                       <button class="btn btn-info" id="update" style="float:right">Update</button>\
                     </div>';
@@ -45,30 +39,20 @@
             teamname=info.teamname;
             member=info.member;
             var length=member.length;
-            var namelist=member[0].name;
+            var namelist=member[0].name
             for (var i=1;i<length;i++) {
               namelist = namelist + " " + member[i].name
             }
-            var hasSubmit=info.hasSubmit;
-            var hasSubmitReport=info.hasSubmitReport;
-            var submitText = "";
-            var submitReportText = "";
-            if (hasSubmit == false) {
-              submitText = "Submit Result";
-            }
-            else {
-              submitText = "Resubmit Result";
-            }
-            if (hasSubmitReport == false){
-              submitReportText = "Submit Report";
-            }
-            else {
-              submitReportText = "Resubmit Report";
-            }
-            $("#video-head").append(sprintf(addhtml, teamname, namelist, submitText, submitReportText));
+            var hasSubmit=info.hasSubmit
+            if(hasSubmit==false)
+              $("#video-head").append(sprintf(addhtml, teamname, namelist, "Submit"));
+            else
+              $("#video-head").append(sprintf(addhtml, teamname, namelist, "Resubmit"))
           }
           else {
-            var addhtml='<button class="btn btn-success" id="video_login" style="float:right;">Login</button>\
+            var addhtml='<button class="btn btn-primary" id="video_register" style="float:right;">Register</button>\
+                    <div style="float:right">&nbsp;&nbsp;</div>\
+                    <button class="btn btn-success" id="video_login" style="float:right;">Login</button>\
                     ';
             $("#video-head").append(addhtml);
           }
@@ -81,7 +65,162 @@
           $(".login-main").show();
           $(".login-forget").hide();
           $("#login").modal("show");
-        });;
+        });
+        $(document).on("click", "#video_register", function(){
+          nowpage = "video";
+          nowtitle = "Video to Language Challenge Register";
+          $("#register_title").text(nowtitle);
+          $("#register").modal("show");
+          $("#register_member").empty();
+          nowmemberid = 1;
+          $("input").val("");
+        });
+        $(document).on("click", "#addmember", function(){
+          var addhtml = '<div class="form-group" id="member%d">\
+                <label class="control-label">Member %d</label>\
+                <div class="row">\
+                  <div class="col-md-4">\
+                    <input type="text" class="form-control" id="member%d_name" placeholder="name">\
+                  </div>\
+                  <div class="col-md-4">\
+                    <input type="email" class="form-control" id="member%d_email" placeholder="email">\
+                  </div>\
+                  <div class="col-md-4">\
+                    <input type="text" class="form-control" id="member%d_organization" placeholder="organization">\
+                  </div>\
+                </div>\
+              </div>';
+          $("#register_member").append(sprintf(addhtml,nowmemberid,nowmemberid,nowmemberid,nowmemberid,nowmemberid));
+          nowmemberid++;
+        });
+        $(document).on("click", "#deletemember", function(){
+          if(nowmemberid==1)
+            return;
+          $(sprintf("#member%d",nowmemberid-1)).remove();
+          nowmemberid--;
+        });
+        $(document).on("click", "#register_button", function(){
+
+          $(".has-error").find("span").remove();
+          $(".has-error").removeClass("has-error");
+          var flag = true;
+
+          var username = $("#username").val();
+          if(username == "") {
+            var parent = $("#username").parent();
+            var addhtml = '<span class="help-block">User name can not be empty</span>';
+            parent.append(addhtml);
+            parent.addClass("has-error");
+            flag = false;
+          }
+
+          var password = $("#password").val();
+          if(password == "") {
+            var parent = $("#password").parent();
+            var addhtml = '<span class="help-block">Password can not be empty</span>';
+            parent.append(addhtml);
+            parent.addClass("has-error");
+            flag = false;
+          }
+          else if(password.length<6){
+            var parent = $("#password").parent();
+            var addhtml = '<span class="help-block">The length of password should be longer than 6</span>';
+            parent.append(addhtml);
+            parent.addClass("has-error");
+            flag = false;
+          }
+
+          var password_repeat = $("#password-repeat").val();
+          if(password_repeat != password) {
+            var parent = $("#password-repeat").parent();
+            var addhtml = '<span class="help-block">The two passwords did not match</span>';
+            parent.append(addhtml);
+            parent.addClass("has-error");
+            flag = false;
+          }
+
+          var teamname = $("#teamname").val();
+          if(teamname == "") {
+            var parent = $("#teamname").parent();
+            var addhtml = '<span class="help-block">Team name can not be empty</span>';
+            parent.append(addhtml);
+            parent.addClass("has-error");
+            flag = false;
+          }
+
+          var caption_name = $("#caption_name").val();
+          var caption_email = $("#caption_email").val();
+          var caption_organization = $("#caption_organization").val();
+          if(caption_name==""||caption_email==""||caption_organization=="") {
+            var addhtml = '<span class="help-block">Please complete all the infomation</span>';
+            $("#caption").append(addhtml).addClass("has-error");
+            flag = false;
+          }
+
+          for(var i=1;i<nowmemberid;i++) {
+            var member_name = $(sprintf("#member%d_name",i)).val();
+            var member_email = $(sprintf("#member%d_email",i)).val();
+            var member_organization = $(sprintf("#member%d_organization",i)).val();
+            if(member_name==""||member_email==""||member_organization=="") {
+              var addhtml = '<span class="help-block">Please complete all the infomation</span>';
+              $(sprintf("#member%d",i)).append(addhtml).addClass("has-error");
+              flag = false;
+            }
+          }
+          if(flag==false)
+            return;
+
+          var para={
+            "challenge_type":nowpage,
+            "username":username,
+            "password":password,
+            "teamname":teamname,
+            "caption_name":caption_name,
+            "caption_email":caption_email,
+            "caption_organization":caption_organization,
+            "member_num":nowmemberid
+          }
+          for(var i=1;i<nowmemberid;i++){
+            var member_name = $(sprintf("#member%d_name",i)).val();
+            var member_email = $(sprintf("#member%d_email",i)).val();
+            var member_organization = $(sprintf("#member%d_organization",i)).val();
+            para[sprintf("member%d_name",i)]=member_name;
+            para[sprintf("member%d_email",i)]=member_email;
+            para[sprintf("member%d_organization",i)]=member_organization;
+          }
+
+          $(this).text("Registering...").addClass("disabled");
+          $.post("/api/register",para,function(data,status){
+            if(data.res=="00000"){
+              alert("register success");
+              window.location.reload();
+            }
+            else if(data.res=="10001"){
+              //
+            }
+            else if(data.res=="20001"){
+              var addhtml = '<span class="help-block">User name is unavailable</span>';
+              $("#username").parent().append(addhtml).addClass("has-error");
+            }
+            else if(data.res=="20002"){
+              var addhtml = '<span class="help-block">Team name is unavailable</span>';
+              $("#teamname").parent().append(addhtml).addClass("has-error");
+            }
+            else if(data.res=="20003"){
+              var place = data.place;
+              if(place==0){
+                var addhtml = '<span class="help-block">This member has been registered in another team</span>';
+                $("#caption").append(addhtml).addClass("has-error");
+              }
+              else{
+                var addhtml = '<span class="help-block">This member has been registered in another team</span>';
+                $(sprintf("#member%d",data.place)).append(addhtml).addClass("has-error");               
+              }
+            }
+            $("#register_button").text("Register").removeClass("disabled");
+          });
+
+        });
         $(document).on("click", "#login_button", function(){
           var flag = true;
           var username=$("#login-username").val();
@@ -138,7 +277,7 @@
         });
         $(document).on("click", "#submit", function() {
           nowpage = "video";
-          nowtitle = "Video to Language Challenge Result Submit";
+          nowtitle = "Video to Language Challenge Submit";
           $("#submit_title").text(nowtitle);
           $("#submit_progress").find(".progress-bar").removeClass("progress-bar-success").attr("style","min-width:2em;width:0%").attr("aria-valuenow", "0").text("0%");
           $("#submit_progress").hide();
@@ -196,72 +335,7 @@
               alert("submit successful");
               $("#submit_button").removeClass("disabled");
               $("#submit-modal").modal("hide");
-              $("#submit").text("Resubmit Result");
-            }
-          })
-        });
-
-        $(document).on("click", "#submit_report", function() {
-          nowpage = "video";
-          nowtitle = "Video to Language Challenge Report Submit";
-          $("#submit_report_title").text(nowtitle);
-          $("#submit_report_progress").find(".progress-bar").removeClass("progress-bar-success").attr("style","min-width:2em;width:0%").attr("aria-valuenow", "0").text("0%");
-          $("#submit_report_progress").hide();
-          $("#submit_report_description").text("");
-          $("#submit-report-modal").modal("show");
-        });
-        $(document).on("click", "#submit_report_select_button", function() {
-          $("#submit_report_real_file").click();
-        });
-        $(document).on("change", "#submit_report_real_file", function() {
-          var name = this.files[0].name;
-          var size = parseInt(this.files[0].size);
-          var d = "B";
-          if (size > 1024) {
-            size = size * 1.0 / 1024;
-            d = "KB";
-          }
-          if (size > 1024) {
-            size = size * 1.0 / 1024;
-            d = "MB";
-          }
-          $("#submit_report_description").text(sprintf("%s  %.2f%s",name,size,d));
-          $("#submit_report_progress").show();
-        });
-        $(document).on("click", "#submit_report_button", function() {
-          $("#submit_report_progress").find(".progress-bar").removeClass("progress-bar-success").attr("style","min-width:2em;width:0%").attr("aria-valuenow", "0").text("0%");
-          $(this).addClass("disabled");
-          var files = $("#submit_report_real_file")[0].files;
-          var len = files.length;
-          var fd = new FormData();
-          fd.append('file', files[0]);
-          $.ajax({
-            url:"/api/submit_report",
-            type:"POST",
-            data:fd,
-            processData:false,
-            contentType:false,
-            xhr:function() {
-              var xhrobj = $.ajaxSettings.xhr();
-              if (xhrobj.upload) {
-                xhrobj.upload.addEventListener("progress", function(event) {
-                  var percent = 0;
-                  var position = event.loaded || event.position;
-                  var total = event.total || event.totalSize;
-                  if (event.lengthComputable) {
-                    percent = Math.ceil(position * 1.0 / total * 100);
-                  }
-                  $("#submit_report_progress").find(".progress-bar").attr("style",sprintf("min-width:2em;width:%d%%", percent)).attr("aria-valuenow", sprintf("%d", percent)).text(sprintf("%d%%", percent));
-                });
-              }
-              return xhrobj;
-            },
-            success: function() {
-              $("#submit_report_progress>.progress-bar").addClass("progress-bar-success");
-              alert("submit successful");
-              $("#submit_report_button").removeClass("disabled");
-              $("#submit-report-modal").modal("hide");
-              $("#submit_report").text("Resubmit Report");
+              $("#submit").text("Resubmit");
             }
           })
         });
@@ -713,6 +787,63 @@ year={2016}}
       </div>
     </div>
 
+    <div class="modal fade" id="register" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="register_title"></h4>
+          </div>
+          <div class="modal-body">
+            <form onsubmit="return false;">
+              <div class="form-group">
+                <label class="control-label" for="username">Username</label>
+                <input type="text" class="form-control" id="username">
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="password">Password</label>
+                <input type="password" class="form-control" id="password">
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="password-repeat">Password Repeat</label>
+                <input type="password" class="form-control" id="password-repeat">
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="teamname">Team Name</label>
+                <input type="text" class="form-control" id="teamname">
+              </div>
+              <div class="form-group" id="caption">
+                <label class="control-label" >Caption</label>
+                <div class="row">
+                  <div class="col-md-4">
+                    <input type="text" class="form-control" id="caption_name" placeholder="name">
+                  </div>
+                  <div class="col-md-4">
+                    <input type="email" class="form-control" id="caption_email" placeholder="email">
+                  </div>
+                  <div class="col-md-4">
+                    <input type="text" class="form-control" id="caption_organization" placeholder="organization">
+                  </div>
+                </div>
+              </div>
+              <div id="register_member">
+              </div>
+            </form>
+            <br>
+            <button class="btn btn-primary" id="addmember"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Add Member
+            </button>
+            &nbsp;
+            <button class="btn btn-danger" id="deletemember"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span>&nbsp;Delete Member
+            </button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="register_button">Register</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="modal fade" id="login" tabindex="-1" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -780,33 +911,6 @@ year={2016}}
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             <button type="button" class="btn btn-success" id="submit_button">Submit</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade" id="submit-report-modal" tabindex="-1" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="submit_report_title"></h4>
-          </div>
-          <div class="modal-body">
-            <form onsubmit="return false;">
-              <input type="file" id="submit_report_real_file" style="display:none;">
-              <button class="btn btn-primary btn-lg" id="submit_report_select_button">Select File</button>
-              <br><br>
-              <p id="submit_report_description"></p>
-              <br>
-              <div class="progress" id="submit_report_progress">
-                <div class="progress-bar" role="progressbar" style="min-width: 2em;width: 0%" aria-valuenow="0" aria-valuemax="100" aria-valuemin="0">0%</div>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-success" id="submit_report_button">Submit</button>
           </div>
         </div>
       </div>

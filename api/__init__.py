@@ -201,11 +201,43 @@ def submit():
 	nowtime = time.strftime('%Y-%m-%d-%H-%M', time.localtime(int(time.time())))
 	filename = teamid + nowtime + '.' + filetype
 	import os
-	os.system("rm tmp/%s*"%teamid)
-	f.save('tmp/' + filename)
+	os.system("rm tmp/result/%s*"%teamid)
+	f.save('tmp/result/' + filename)
 
 	from lib import team_submit
 	team_submit(teamid)
+
+	return jsonify(res=SUCCESS)
+
+@api.route('/submit_report', methods=['POST'])
+def submit_report():
+	cookies = request.cookies
+	if not 'session' in cookies:
+		return jsonify(res=NOT_LOGIN)
+	session = cookies['session']
+
+	from lib import get_teamid_by_session
+	teamid = get_teamid_by_session(session)
+	if teamid == None:
+		resp = jsonify(res=NOT_LOGIN)
+		resp.delete_cookie('session')
+		return resp 
+
+	teamid = teamid.replace('&', '_')
+
+	files = request.files
+	f = files['file']
+	filename = f.filename
+	filetype = filename.split('.')[-1]
+	import time
+	nowtime = time.strftime('%Y-%m-%d-%H-%M', time.localtime(int(time.time())))
+	filename = teamid + nowtime + '.' + filetype
+	import os
+	os.system("rm tmp/report/%s*"%teamid)
+	f.save('tmp/report/' + filename)
+
+	from lib import team_submit_report
+	team_submit_report(teamid)
 
 	return jsonify(res=SUCCESS)
 

@@ -162,10 +162,15 @@ def get_info_by_session(session):
         flag = True
     else:
         flag = False
+    if 'hasSubmitReport' in one:
+        flag2 = True
+    else:
+        flag2 = False
     res = {
         'teamname':one['teamname'],
         'member':one['member'],
-        'hasSubmit':flag
+        'hasSubmit':flag,
+        'hasSubmitReport':flag2
     }
     return True, res
 
@@ -177,6 +182,15 @@ def team_submit(temp):
     db = MongoDB().db
     register_team = eval("db.%s"%challenge_type)
     register_team.update({'_id':_id}, {'$set':{'hasSubmit':True}})
+
+def team_submit_report(temp):
+    team_id, challenge_type = temp.split('_')
+    from bson import ObjectId
+    _id = ObjectId(team_id)
+    from model import MongoDB
+    db = MongoDB().db
+    register_team = eval("db.%s"%challenge_type)
+    register_team.update({'_id':_id}, {'$set':{'hasSubmitReport':True}})
 
 def get_all_team(challenge_type):
     from model import MongoDB

@@ -23,9 +23,12 @@
               var teamname = team[i].teamname;
               var member = team[i].member;
               var hasSubmit = team[i].hasSubmit;
+              var hasSubmitReport = team[i].hasSubmitReport;
               var addhtml = '\
               <tr>\
               <td>%d\
+              </td>\
+              <td>%s\
               </td>\
               <td>%s\
               </td>\
@@ -41,11 +44,18 @@
               ';
               var caption_text = sprintf('%s  &lt;<a href="mailto:%s">%s</a>&gt;', member[0].name, member[0].email, member[0].email);
               var hasSubmit_text;
+              var hasSubmitReport_text;
               if (hasSubmit == true) {
                 hasSubmit_text = "Yes";
               }
               else {
                 hasSubmit_text = "No";
+              }
+              if (hasSubmitReport == true) {
+                hasSubmitReport_text = "Yes";
+              }
+              else {
+                hasSubmitReport_text = "No";
               }
               var member_text = "";
               for (var j = 1; j < member.length; j++) {
@@ -54,7 +64,7 @@
                 var organization = member[j].organization;
                 member_text = member_text + sprintf("[ %s  %s  %s]   ", name, email, organization);
               }
-              $("#table").append(sprintf(addhtml, i, teamname, caption_text, member[0].organization, member_text, hasSubmit_text));
+              $("#table").append(sprintf(addhtml, i, teamname, caption_text, member[0].organization, member_text, hasSubmit_text, hasSubmitReport_text));
             }
           }
         });
@@ -79,7 +89,10 @@
           Member
         </th>
         <th>
-          Has Submit?
+          Has Submit Result?
+        </th>
+        <th>
+          Has Submit Report?
         </th>
       </tr>
       </tbody>
