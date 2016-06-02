@@ -197,7 +197,9 @@ def submit():
 	f = files['file']
 	filename = f.filename
 	filetype = filename.split('.')[-1]
-	filename = teamid + '.' + filetype
+	import time
+	nowtime = time.strftime('%Y-%m-%d-%H-%M', time.localtime(int(time.time())))
+	filename = teamid + nowtime + '.' + filetype
 	import os
 	os.system("rm tmp/%s*"%teamid)
 	f.save('tmp/' + filename)
