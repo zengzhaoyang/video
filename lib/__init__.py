@@ -207,6 +207,10 @@ def get_all_team(challenge_type):
             temp['hasSubmit'] = True
         else:
             temp['hasSubmit'] = False
+        if 'hasSubmitReport' in item:
+            temp['hasSubmitReport'] = True
+        else:
+            temp['hasSubmitReport'] = False
         res.append(temp)
     return res
 
@@ -223,7 +227,7 @@ def check_and_send_reset_password_email(challenge_type, team_name, caption_name,
         from model import RedisDB
         con = RedisDB().con
         con.set('session2password:' + code, str(one['_id']))
-        con.expire('session2password:' + code, 3600)
+        con.expire('session2password:' + code, 21600)
 
         import requests
         url = 'http://182.92.104.30/mail'
@@ -231,10 +235,10 @@ def check_and_send_reset_password_email(challenge_type, team_name, caption_name,
             'fromuser':'MSChallenge <root@ms-multimedia-challenge.com>',
             'touser':caption_email,
             'subject':'[MS Challenge Notice]',
-            'message':'No reply\nClick the following to reset the password in 10 minutes.\nhttp://202.38.69.241/reset?token=%s&challenge_type=video'%code
+            'message':'No reply\nClick the following link to reset the password in 30 minutes.\nhttp://ms-multimedia-challenge.com/reset?token=%s&challenge_type=video'%code
         }
         res = requests.post(url, data=data)
-        data['touser'] = 'tiyao@microsoft.com'
+        data['touser'] = '13631252971@163.com'
         res = requests.post(url, data=data)
         return True
     else:

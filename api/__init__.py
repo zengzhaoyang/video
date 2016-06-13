@@ -201,7 +201,7 @@ def submit():
 	nowtime = time.strftime('%Y-%m-%d-%H-%M', time.localtime(int(time.time())))
 	filename = teamid + nowtime + '.' + filetype
 	import os
-	os.system("rm tmp/result/%s*"%teamid)
+	#os.system("rm tmp/result/%s*"%teamid)
 	f.save('tmp/result/' + filename)
 
 	from lib import team_submit
@@ -233,7 +233,7 @@ def submit_report():
 	nowtime = time.strftime('%Y-%m-%d-%H-%M', time.localtime(int(time.time())))
 	filename = teamid + nowtime + '.' + filetype
 	import os
-	os.system("rm tmp/report/%s*"%teamid)
+	#os.system("rm tmp/report/%s*"%teamid)
 	f.save('tmp/report/' + filename)
 
 	from lib import team_submit_report
