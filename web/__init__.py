@@ -19,6 +19,10 @@ def challenge():
 def dataset():
     return render_template('dataset.html')
 
+@app.route('/leaderboard', methods=['GET'])
+def leaderboard():
+    return render_template('leaderboard.html')
+
 @app.route('/contact', methods=['GET'])
 def external():
     return render_template('contact.html')
