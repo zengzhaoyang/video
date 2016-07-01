@@ -79,19 +79,19 @@
                   </ul>
                   <div class="tab-content">
                     <div role="tabpanel" class="tab-pane fade active in" id="m1">
-                      <table class="table table-bordered table-striped">
+                      <table class="table table-bordered table-striped table-hover">
                         <tr>
                           <th>Rank
                           </th>
                           <th>Team
                           </th>
-                          <th>Bleu@4
+                          <th>BLEU@4
                           </th>
                           <th>Meteor
                           </th>
-                          <th>CIDEr
+                          <th>CIDEr-D
                           </th>
-                          <th>Rouge_L
+                          <th>ROUGE-L
                           </th>
                         </tr>
                         <tr><td>1</td><td>v2t_navigator</td><td>0.408</td><td>0.282</td><td>0.448</td><td>0.609</td></tr>
@@ -111,7 +111,7 @@
                         <tr><td>15</td><td>scorpio</td><td>0.348</td><td>0.251</td><td>0.367</td><td>0.571</td></tr>
                         <tr><td>16</td><td>KR</td><td>0.328</td><td>0.253</td><td>0.364</td><td>0.564</td></tr>
                         <tr><td>17</td><td>X_Q</td><td>0.319</td><td>0.243</td><td>0.320</td><td>0.559</td></tr>
-                        <tr><td>18</td><td>Shen&Xu</td><td>0.314</td><td>0.247</td><td>0.338</td><td>0.555</td></tr>
+                        <tr><td>18</td><td>Shen&amp;Xu</td><td>0.314</td><td>0.247</td><td>0.338</td><td>0.555</td></tr>
                         <tr><td>19</td><td>VRPGASU</td><td>0.280</td><td>0.254</td><td>0.260</td><td>0.526</td></tr>
                         <tr><td>20</td><td>AFRL</td><td>0.289</td><td>0.227</td><td>0.338</td><td>0.504</td></tr>
                         <tr><td>21</td><td>Daedalus</td><td>0.269</td><td>0.196</td><td>0.127</td><td>0.505</td></tr>
@@ -121,7 +121,7 @@
                       </table>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="m2">
-                      <table class="table table-bordered table-striped">
+                      <table class="table table-bordered table-striped table-hover">
                         <tr>
                           <th>Rank</th>
                           <th>Team</th>
@@ -162,11 +162,11 @@
                 <br>
                 <p>We computed multiple common metrics, including BLEU@4, METEOR, ROUGE-L, and CIDEr. The performances of the primary run from each team are measured for comparison across teams. The results of all runs can be downloaded <a href="/static/resource/all_runs.xlsx">here</a>.</p>
                 <p>In addition, we will carry out the human evaluation of the systems submitted to this challenge on a subset of the testing set. Human were asked to rank the generated sentences of the primary run from each team and a reference sentence from 1 to 5 (lower - better) with respect to the following criteria.</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;<b>&middot;Coherence</b>: judge the logic and readability of the sentence.</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;<b>&middot;Relevance</b>: whether the sentence contains the more relevant and important objects/actions/events in the video clip?</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;<b>&middot;Helpful for blind (additional criteria)</b>: how helpful would the sentence be for a blind person to understand what is happening in this video clip?</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b style="font-size:26px;">&middot;</b>&nbsp;&nbsp;&nbsp;&nbsp;<b>Coherence</b>: &nbsp;&nbsp;judge the logic and readability of the sentence.</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b style="font-size:26px;">&middot;</b>&nbsp;&nbsp;&nbsp;&nbsp;<b>Relevance</b>: &nbsp;&nbsp;whether the sentence contains the more relevant and important objects/actions/events in the video clip?</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b style="font-size:26px;">&middot;</b>&nbsp;&nbsp;&nbsp;&nbsp;<b>Helpful for blind (additional criteria)</b>: &nbsp;&nbsp;how helpful would the sentence be for a blind person to understand what is happening in this video clip?</p>
                 <br>
-                <table class="table table-bordered">
+                <table class="table table-bordered table-striped">
                   <tr>
                     <td>M1</td>
                     <td>BLEU@4, METEOR, ROUGE-L, and CIDEr.</td>
@@ -189,7 +189,7 @@
                 <p>The larger the score, the better the performance.</p>
                 <p>We finally rank all the participants in two separate lists, one in terms of R(team) and the other S(team).</p>
                 <br>
-                <table class="table table-bordered">
+                <table class="table table-bordered table-striped">
                   <tr>
                     <td>M1</td>
                     <td><i>R</i>(team) = <i>R</i>(team)@BLEU@4 + <i>R</i>(team)@METEOR + <i>R</i>(team)@ROUGE-L + <i>R</i>(team)@CIDEr</td>
