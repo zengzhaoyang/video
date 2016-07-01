@@ -530,7 +530,7 @@ The contestants are asked to develop video to language system based on the MSR-V
               <h3>Evaluation Metric</h3>
               <br>
               <p>
-              The evaluation provided here can be used to obtain results on the testing set of MSR-VTT. It computes multiple common metrics, including BLEU@4, METEOR, ROUGE-L, and CIDEr. </p>
+              The evaluation provided here can be used to obtain results on the testing set of MSR-VTT. It computes multiple common metrics, including BLEU@4, METEOR, ROUGE-L, and CIDEr-D. </p>
               <p>
 In addition, we will carry out the human evaluation of the systems submitted to this challenge on a subset of the testing set. Human were asked to rank the generated sentences of the primary run from each team and a reference sentence from 1 to 5 (lower - better) with respect to the following criteria.
               </p>
@@ -549,7 +549,7 @@ In addition, we will carry out the human evaluation of the systems submitted to 
               <h3>Ranking</h3>
               <br>
               <p>The ranking for the competition this year is based on objective evaluation and human evaluation, respectively. Specifically, a rank list of teams is produced by sorting their scores on each objective evaluation metric, respectively. The final rank of a team is measured by combining its ranking positions in the four ranking list and defined as:</p>
-              <p><i>R</i>(team) = <i>R</i>(team)@BLEU@4 + <i>R</i>(team)@METEOR + <i>R</i>(team)@ROUGE-L + <i>R</i>(team)@CIDEr.</p>
+              <p><i>R</i>(team) = <i>R</i>(team)@BLEU@4 + <i>R</i>(team)@METEOR + <i>R</i>(team)@ROUGE-L + <i>R</i>(team)@CIDEr-D.</p>
               <p>where <i>R</i>(team) is the rank position of the team, e.g., if the team achieves the best performance in terms of BLEU@4, then <i>R</i>(team)@BLEU@4 is "1". The smaller the final ranking, the better the performance.</p>
               <p>Similar in spirit, we will linearly fuse the scores of human evaluation on Coherence, Relevance and Helpful for Blind (in a scale of 1-5) for each team. The final score of each team is given by:</p>
               <p><i>S</i>(team) = <i>S</i>(team)@Coherence + <i>S</i>(team)@Relevance + <i>S</i>(team)@Helpful for Blind.</p>
