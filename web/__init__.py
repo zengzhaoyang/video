@@ -16,7 +16,14 @@ def index():
 
 @app.route('/people', methods=['GET'])
 def people():
-    return render_template('people.html')
+    headers = request.headers
+    host = headers['Host']
+    if host.startswith('2016'):
+        return render_template('people.2016.html')
+    elif host == 'ms-multimedia-challenge.com':
+        return redirect('http://2017.ms-multimedia-challenge.com/people')
+    else:
+        return render_template('people.2017.html')
 
 @app.route('/challenge', methods=['GET'])
 def challenge():
@@ -51,7 +58,14 @@ def leaderboard():
 
 @app.route('/contact', methods=['GET'])
 def external():
-    return render_template('contact.html')
+    headers = request.headers
+    host = headers['Host']
+    if host.startswith('2016'):
+        return render_template('concact.2016.html')
+    elif host == 'ms-multimedia-challenge.com':
+        return redirect('http://2017.ms-multimedia-challenge.com/concact')
+    else:
+        return render_template('concact.2017.html')
 
 @app.route('/browse', methods=['GET'])
 def browse():
