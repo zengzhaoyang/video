@@ -61,11 +61,11 @@ def external():
     headers = request.headers
     host = headers['Host']
     if host.startswith('2016'):
-        return render_template('concact.2016.html')
+        return render_template('contact.2016.html')
     elif host == 'ms-multimedia-challenge.com':
-        return redirect('http://2017.ms-multimedia-challenge.com/concact')
+        return redirect('http://2017.ms-multimedia-challenge.com/contact')
     else:
-        return render_template('concact.2017.html')
+        return render_template('contact.2017.html')
 
 @app.route('/browse', methods=['GET'])
 def browse():

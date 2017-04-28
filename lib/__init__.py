@@ -38,11 +38,11 @@ def send_email(member, message):
 
     smtp = smtplib.SMTP('localhost')
     msg = MIMEText(message, 'plain', 'utf-8')
-    msg['From'] = Header("MS-MULTIMEDIA-CHALLENGE<root@ms-multimedia-challenge.com>", 'utf-8')
-    msg['To'] = Header("msravrt@163.com", 'utf-8')
+    msg['From'] = Header("MS-MULTIMEDIA-CHALLENGE<root@ms-multimedia-challenge.com>")
+    msg['To'] = Header("msravrt@163.com")
     msg['Subject'] = '[MS-MULTIMEDIA-CHALLENGE Notice]'
     try:
-        smtplib.sendmail("root@ms-multimedia-challenge.com", ["msravrt@163.com"], msg.as_string())
+        smtp.sendmail("root@ms-multimedia-challenge.com", ["zengzhaoyang0701@qq.com", 'v-zhazen@microsoft.com','zengzhaoyang0701@gmail.com'], msg.as_string())
         return 'ok'
     except:
         return 'error'
@@ -257,7 +257,7 @@ def check_and_send_reset_password_email(challenge_type, team_name, caption_name,
         # res = requests.post(url, data=data)
         # data['touser'] = '13631252971@163.com'
         # res = requests.post(url, data=data)
-        # return True
+        return True
     else:
         return False
 
