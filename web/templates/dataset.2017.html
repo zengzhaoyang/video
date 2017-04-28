@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN" style="overflow-y: visible;">
+  <head>
+    <title>Microsoft Multimedia Challenge</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/google-code-prettify/run_prettify.js"></script>
+    <style type="text/css">
+      .main {
+        min-height: 100%;
+      }
+
+    </style>
+    <script type="text/javascript">
+      $(document).ready(function(){
+
+      });
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+<button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu" aria-expanded="false">
+            <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <!-- <img src="http://mscoco.org/static/images/logo.jpg" height="155%"> -->
+            Multimedia
+          </a>
+        </div>
+<div class="collapse navbar-collapse" id="menu">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/">Home</a></li>
+          <li><a href="/people">People</a></li>
+          <li><a href="/challenge">Challenge</a></li>
+          <li><a href="/leaderboard">Leaderboard</a></li>
+          <li class="active"><a href="/dataset">Dataset</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+</div>
+    </nav>
+
+    <div class="container main">
+      <div>
+
+        <div class="col-md-12">
+          <p>
+            <!-- The dataset is based on MSR-VTT and we split the data according to 65%:30%:5% in the training, testing and validation set, respectively. -->
+In 2nd MSR Video to Language Challenge, we have included all the training, validation, and testing data in 1st MSR Video to Language Challenge as our new training data. We will release new 2.5K testing data this year.
+So we have 10K video data for training and 2.5K video data for testing, each of video containing 20 AMT annotated sentences. 
+          </p>
+          <p>
+            Below table shows the statistics of training data in 2nd MSR Video to Language Challenge. 
+          </p>
+          <br>
+          <table class="table table-bordered">
+            <tr>
+              <th>Dataset</th>
+              <th>Context</th>
+              <th>Sentence source</th>
+              <th>#Video</th>
+              <th>#Clip</th>
+              <th>#Sentence</th>
+              <th>#Word</th>
+              <th>Vocabulary</th>
+              <th>Duration(hr)</th>
+            </tr>
+            <tr>
+              <td>MSR-VTT</td>
+              <td>20 categories</td>
+              <td>AMT workers</td>
+              <td>7,180</td>
+              <td>10,000</td>
+              <td>200,000</td>
+              <td>1,856,523</td>
+              <td>29,316</td>
+              <td>41.2</td>
+            </tr>
+          </table>
+          <p>
+            * In MSR-VTT dataset, we provide the category information for each video clip and the video clip contains audio information as well. 
+          </p>
+          <p>
+            All video info and caption sentences are formatted in a JSON file as
+          </p>
+          <pre class="prettyprint lang-py">
+{
+  "info" : {
+    "year" : str,
+    "version" : str,
+    "description": str,
+    "contributor": str,
+    "data_created": str
+  },
+  "videos": {
+    "id": int,
+    "video_id": str,
+    "category": int,
+    "url": str,
+    "start time": float,
+    "end time": float,
+    "split": str
+  },
+  "sentences": {
+    "sen_id": int,
+    "video_id": str,
+    "caption": str
+  }
+}
+
+          </pre>
+<br>
+<p>You can download video URLs and their associated sentences <a href="/static/resource/train_2017.zip">here</a>. For more details, please refer to <a href="http://staff.ustc.edu.cn/~xinmei/Project/Project.html">Prof. Xinmei Tian's Lab Page</a></p>
+<p class="text-danger">Note that the testing data will ONLY be released to participants who have registered the challenge during the competition. Until the challenge completes, we will make the testing data publically available to the whole research community. </p>
+        </div>
+
+      </div>
+    </div>
+  </body>
+</html>

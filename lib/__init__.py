@@ -2,6 +2,10 @@
 
 from config import *
 
+import smtplib
+from email.mime.text import MIMEText
+from email.header import Header
+
 def generate_session():
     import os
     from model import RedisDB
@@ -15,22 +19,33 @@ def generate_session():
     return code
 
 def send_email(member):
-    import requests
-    url = 'http://182.92.104.30/mail'
-    data = {
-        'fromuser':'MSChallenge <root@ms-multimedia-challenge.com>',
-        'touser':'tmei@microsoft.com',
-        'subject':'[MS Challenge Notice]',
-        'message':'No reply\nMS Multimedia Register\n'
-    }
-    mem = []
-    for item in member:
-        one = '%s %s %s\n'%(item['name'], item['email'], item['organization'])
-        mem.append(one)
-    data['message'] = data['message'] + ''.join(mem)
-    res = requests.post(url, data=data)
-    data['touser'] = 'tiyao@microsoft.com'
-    res = requests.post(url, data=data)
+    # import requests
+    # url = 'http://182.92.104.30/mail'
+    # data = {
+    #     'fromuser':'MSChallenge <root@ms-multimedia-challenge.com>',
+    #     'touser':'tmei@microsoft.com',
+    #     'subject':'[MS Challenge Notice]',
+    #     'message':'No reply\nMS Multimedia Register\n'
+    # }
+    # mem = []
+    # for item in member:
+    #     one = '%s %s %s\n'%(item['name'], item['email'], item['organization'])
+    #     mem.append(one)
+    # data['message'] = data['message'] + ''.join(mem)
+    # res = requests.post(url, data=data)
+    # data['touser'] = 'tiyao@microsoft.com'
+    # res = requests.post(url, data=data)
+
+    smtp = smtplib.SMTP('localhost')
+    msg = MIMEText('', 'plain', 'utf-8')
+    msg['From'] = Header("MS-MULTIMEDIA-CHALLENGE<root@ms-multimedia-challenge.com>", 'utf-8')
+    msg['To'] = Header("msravrt@163.com", 'utf-8')
+    msg['Subject'] = '[MS-MULTIMEDIA-CHALLENGE Notice]'
+    try:
+        smtplib.sendmail("root@ms-multimedia-challenge.com", ["msravrt@163.com"], msg.as_string())
+        return 'ok'
+    except:
+        return 'error'
 
 
 def check_team_member(challenge_type, username, password, team_name, member):

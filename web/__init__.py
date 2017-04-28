@@ -1,11 +1,11 @@
 #-*-coding:utf-8-*-
 
 from server import app
-from flask import render_template, make_response, request, redirect
+from flask import render_template, make_response, request, redirect, abort
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    return render_template('index.2017.html')
 
 @app.route('/people', methods=['GET'])
 def people():
@@ -13,15 +13,30 @@ def people():
 
 @app.route('/challenge', methods=['GET'])
 def challenge():
-    return render_template('challenge.html')
+    headers = request.headers
+    host = headers['Host']
+    if host.startswith('2016'):
+        return render_template('challenge.2016.html')
+    else:
+        return render_template('challenge.2016.html')
 
 @app.route('/dataset', methods=['GET'])
 def dataset():
-    return render_template('dataset.html')
+    headers = request.headers
+    host = headers['Host']
+    if host.startswith('2016'):
+        return render_template('dataset.2016.html')
+    else:
+        return render_template('dataset.2017.html')
 
 @app.route('/leaderboard', methods=['GET'])
 def leaderboard():
-    return render_template('leaderboard.html')
+    headers = request.headers
+    host = headers['Host']
+    if host.startswith('2016'):
+        return render_template('leaderboard.2016.html')
+    else:
+        abort(404)
 
 @app.route('/contact', methods=['GET'])
 def external():
