@@ -531,17 +531,19 @@
             }
           });
         });
-        $("#video_button").click(function(){
+         $("#video_button").click(function(){
             $("#video_non_overview").fadeOut();
             $("#video_overview").fadeIn();
             $(this).addClass("active");
             $("#video_year_2017").removeClass("active");
+            $("#video_title").html("Video to Language Challenge");
           });
         $("#video_year_2017").click(function(){
           $("#video_overview").fadeOut();
           $("#video_non_overview").fadeIn();
           $(this).addClass("active");
           $("#video_button").removeClass("active");
+          $("#video_title").html("The 2<sup>nd</sup> Video to Language Challenge");
         });
       });
     </script>
@@ -604,9 +606,9 @@
               <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="video">
                   <div id="video-head">
-                    <h1 style="display: inline;">
-                    The 2<sup>nd</sup> Video to Language Challenge
-                    </h1>
+                    <h2 style="display: inline;" id="video_title">
+                    Video to Language Challenge
+                    </h2>
                     <!-- <div style="float:right">
                       <h5>Welcome   HAHA</h5>
                       <p>aaaa dddd dddd dddd dddd</p>

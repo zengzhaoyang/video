@@ -344,12 +344,14 @@
             $("#video_overview").fadeIn();
             $(this).addClass("active");
             $("#video_year_2016").removeClass("active");
+            $("#video_title").html("Video to Language Challenge");
           });
         $("#video_year_2016").click(function(){
           $("#video_overview").fadeOut();
           $("#video_non_overview").fadeIn();
           $(this).addClass("active");
           $("#video_button").removeClass("active");
+          $("#video_title").html("The 1<sup>st</sup> Video to Language Challenge");
         });
       });
     </script>
@@ -395,7 +397,7 @@
             Video to Language Challenge
             </a>
 
-            <a class="list-group-item" href="http://2017.ms-multimedia-challenge.com" aria-controls="video" role="tab" data-toggle="tab">
+            <a class="list-group-item" href="http://2017.ms-multimedia-challenge.com">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017
             </a>
             <a class="list-group-item" id="video_year_2016">
@@ -413,9 +415,9 @@
               <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="video">
                   <div id="video-head">
-                    <h1 style="display: inline;">
-                    The 1<sup>st</sup> Video to Language Challenge
-                    </h1>
+                    <h2 style="display: inline;" id="video_title">
+                    Video to Language Challenge
+                    </h2>
                     <!-- <div style="float:right">
                       <h5>Welcome   HAHA</h5>
                       <p>aaaa dddd dddd dddd dddd</p>
