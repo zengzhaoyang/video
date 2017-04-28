@@ -339,6 +339,14 @@
           });
 
         });
+        $("#video_button").click(function(){
+            $("#video_non_overview").fadeOut();
+            $("#video_overview").fadeIn();
+          });
+        $("#video_year_2016").click(function(){
+          $("#video_overview").fadeOut();
+          $("#video_non_overview").fadeIn();
+        });
       });
     </script>
   </head>
@@ -358,13 +366,7 @@
         <ul class="nav navbar-nav navbar-right">
           <li><a href="/">Home</a></li>
           <li><a href="/people">People</a></li>
-          <li class="active dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Challenge<span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="http://2017.ms-multimedia-challenge.com/challenge">2017</a></li>
-              <li><a href="#">2016</a></li>
-            </ul>
-          </li>
+          <li class="active"><a href="/challenge">Challenge</a></li>
           <li><a href="/leaderboard">Leaderboard</a></li>
           <li><a href="/dataset">Dataset</a></li>
           <li><a href="/contact">Contact</a></li>
@@ -385,9 +387,17 @@
             <a href="#fine" aria-controls="fine" role="tab" data-toggle="tab" class="list-group-item disabled">
             Fine-grained Image Recognition Challenge
             </a>
-            <a href="#video" aria-controls="video" role="tab" data-toggle="tab" class="list-group-item active">
+            <a id="video_button" class="list-group-item active" style="cursor:pointer">
             Video to Language Challenge
             </a>
+            <div id="video_year">
+              <a class="list-group-item" href="http://2017.ms-multimedia-challenge.com" aria-controls="video" role="tab" data-toggle="tab">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017
+              </a>
+              <a class="list-group-item" id="video_year_2016">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016
+              </a>
+            </div>
             <a href="#qa" aria-controls="qa" role="tab" data-toggle="tab" class="list-group-item disabled">
             Multimedia Q&amp;A Challenge
             </a>
@@ -416,8 +426,7 @@
               <br>
               <hr>
 
-              <h3>Overview</h3>
-              <br>
+              <div id="video_overview">
               <p>Video has become ubiquitous on the Internet, broadcasting channels, as well as personal devices. This has encouraged the development of advanced techniques to analyze the semantic video content for a wide variety of applications. Recognition of videos has been a fundamental challenge of computer vision for decades. Previous research has predominantly focused on recognizing videos with a predefined yet very limited set of individual words. In this grand challenge, we go a step further and target for translating video content to a complete and natural sentence. Given an input video clip, the goal is to automatically generate a complete and natural sentence to describe video content, ideally encapsulating its most informative dynamics. </p>
               <div class="row">
                 <div class="col-md-4">
@@ -470,9 +479,9 @@
                   <span style="font-size:10px">5. A basketball team is playing in front of speculators.</span>
                 </div>
               </div>
-              <br>
-              <hr>
+              </div>
 
+              <div id="video_non_overview">
               <h3>Challenge</h3>
               <br>
               <p>To further motivate and challenge the academic and industrial research community, Microsoft will release Microsoft Research - Video to Text (MSR-VTT), a large-scale video benchmark to public for bridging video and language. The dataset contains 41.2 hours and 200K clip-sentence pairs in total, covering the most comprehensive categories and diverse visual content, and representing the largest dataset in terms of sentence and vocabulary. The dataset can be used to train and evaluate video to language tasks, and other tasks (e.g., video retrieval, event detection, video categorization, etc.) as well in the near future. This challenge allows to use external data to train and tune parameters of algorithms. Therefore, each submission must explicitly cite the kind of external data used in the submission file.
@@ -594,6 +603,7 @@ author={Yingwei Pan and Tao Mei and Ting Yao and Houqiang Li and Yong Rui},
 booktitle={Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
 year={2016}}
               </pre>
+              </div>
                 </div>
               </div>
               

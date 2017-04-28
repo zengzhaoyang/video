@@ -530,7 +530,14 @@
               alert("Team Name does not match to Captain Information")
             }
           });
-
+        });
+        $("#video_button").click(function(){
+            $("#video_non_overview").fadeOut();
+            $("#video_overview").fadeIn();
+          });
+        $("#video_year_2017").click(function(){
+          $("#video_overview").fadeOut();
+          $("#video_non_overview").fadeIn();
         });
       });
     </script>
@@ -551,13 +558,7 @@
         <ul class="nav navbar-nav navbar-right">
           <li><a href="/">Home</a></li>
           <li><a href="/people">People</a></li>
-          <li class="active dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Challenge<span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="#">2017</a></li>
-              <li><a href="http://2016.ms-multimedia-challenge.com/challenge">2016</a></li>
-            </ul>
-          </li>
+          <li class="active"><a href="/challenge">Challenge</a></li>
           <li><a href="/dataset">Dataset</a></li>
           <li><a href="/contact">Contact</a></li>
         </ul>
@@ -577,9 +578,17 @@
             <a href="#fine" aria-controls="fine" role="tab" data-toggle="tab" class="list-group-item disabled">
             Fine-grained Image Recognition Challenge
             </a>
-            <a href="#video" aria-controls="video" role="tab" data-toggle="tab" class="list-group-item active">
+            <a id="video_button" class="list-group-item active" style="cursor:pointer">
             Video to Language Challenge
             </a>
+            <div id="video_year">
+              <a class="list-group-item" id="video_year_2017">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017
+              </a>
+              <a class="list-group-item" href="http://2016.ms-multimedia-challenge.com/challenge">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016
+              </a>
+            </div>
             <a href="#qa" aria-controls="qa" role="tab" data-toggle="tab" class="list-group-item disabled">
             Multimedia Q&amp;A Challenge
             </a>
@@ -608,62 +617,62 @@
               <br>
               <hr>
 
-              <h3>Overview</h3>
-              <br>
-              <p>Video has become ubiquitous on the Internet, broadcasting channels, as well as personal devices. This has encouraged the development of advanced techniques to analyze the semantic video content for a wide variety of applications. Recognition of videos has been a fundamental challenge of computer vision for decades. Previous research has predominantly focused on recognizing videos with a predefined yet very limited set of individual words. In this grand challenge, we go a step further and target for translating video content to a complete and natural sentence. Given an input video clip, the goal is to automatically generate a complete and natural sentence to describe video content, ideally encapsulating its most informative dynamics. </p>
-              <div class="row">
-                <div class="col-md-4">
-                  <img src="/static/img/image1.gif" width="100%" height="170px">
-                  <span style="font-size:10px">1. A black and white horse runs around.</span><br>
-                  <span style="font-size:10px">2. A horse galloping through an open field.</span><br>
-                  <span style="font-size:10px">3. A horse is running around in green lush grass.</span><br>
-                  <span style="font-size:10px">4. There is a horse running on the grassland.</span><br>
-                  <span style="font-size:10px">5. A horse is riding in the grass.</span>
-                </div>
-                <div class="col-md-4">
-                  <img src="/static/img/image2.gif" width="100%" height="170px">
-                  <span style="font-size:10px">1. A woman giving speech on news channel.</span><br>
-                  <span style="font-size:10px">2. Hillary Clinton gives a speech.</span><br>
-                  <span style="font-size:10px">3. Hillary Clinton is making a speech at the conference of mayors.</span><br>
-                  <span style="font-size:10px">4. A woman is giving a speech on stage.</span><br>
-                  <span style="font-size:10px">5. A lady speak some news on TV.</span>
-                </div>
-                <div class="col-md-4">
-                  <img src="/static/img/image3.gif" width="100%" height="170px">
-                  <span style="font-size:10px">1. A child is cooking in the kitchen.</span><br>
-                  <span style="font-size:10px">2. A girl is putting her finger into a plastic cup containing an egg.</span><br>
-                  <span style="font-size:10px">3. Children boil water and get egg whites ready.</span><br>
-                  <span style="font-size:10px">4. People make food in a kitchen.</span><br>
-                  <span style="font-size:10px">5. A group of people are making food in a kitchen.</span>
+              <div id="video_overview">
+                <p>Video has become ubiquitous on the Internet, broadcasting channels, as well as personal devices. This has encouraged the development of advanced techniques to analyze the semantic video content for a wide variety of applications. Recognition of videos has been a fundamental challenge of computer vision for decades. Previous research has predominantly focused on recognizing videos with a predefined yet very limited set of individual words. In this grand challenge, we go a step further and target for translating video content to a complete and natural sentence. Given an input video clip, the goal is to automatically generate a complete and natural sentence to describe video content, ideally encapsulating its most informative dynamics. </p>
+                <div class="row">
+                  <div class="col-md-4">
+                    <img src="/static/img/image1.gif" width="100%" height="170px">
+                    <span style="font-size:10px">1. A black and white horse runs around.</span><br>
+                    <span style="font-size:10px">2. A horse galloping through an open field.</span><br>
+                    <span style="font-size:10px">3. A horse is running around in green lush grass.</span><br>
+                    <span style="font-size:10px">4. There is a horse running on the grassland.</span><br>
+                    <span style="font-size:10px">5. A horse is riding in the grass.</span>
+                  </div>
+                  <div class="col-md-4">
+                    <img src="/static/img/image2.gif" width="100%" height="170px">
+                    <span style="font-size:10px">1. A woman giving speech on news channel.</span><br>
+                    <span style="font-size:10px">2. Hillary Clinton gives a speech.</span><br>
+                    <span style="font-size:10px">3. Hillary Clinton is making a speech at the conference of mayors.</span><br>
+                    <span style="font-size:10px">4. A woman is giving a speech on stage.</span><br>
+                    <span style="font-size:10px">5. A lady speak some news on TV.</span>
+                  </div>
+                  <div class="col-md-4">
+                    <img src="/static/img/image3.gif" width="100%" height="170px">
+                    <span style="font-size:10px">1. A child is cooking in the kitchen.</span><br>
+                    <span style="font-size:10px">2. A girl is putting her finger into a plastic cup containing an egg.</span><br>
+                    <span style="font-size:10px">3. Children boil water and get egg whites ready.</span><br>
+                    <span style="font-size:10px">4. People make food in a kitchen.</span><br>
+                    <span style="font-size:10px">5. A group of people are making food in a kitchen.</span>
 
-                </div>
-                <div class="col-md-4">
-                  <img src="/static/img/image4.gif" width="100%" height="170px">
-                  <span style="font-size:10px">1. A man and a woman performing a musical.</span><br>
-                  <span style="font-size:10px">2. A teenage couple perform in an amateur musical.</span><br>
-                  <span style="font-size:10px">3. Dancers are playing a routine.</span><br>
-                  <span style="font-size:10px">4. People are dancing in a musical.</span><br>
-                  <span style="font-size:10px">5. Some people are acting and singing for performance.</span>
-                </div>
-                <div class="col-md-4">
-                  <img src="/static/img/image5.gif" width="100%" height="170px">
-                  <span style="font-size:10px">1. A white car is drifting.</span><br>
-                  <span style="font-size:10px">2. Cars racing on a road surrounded by lots of people.</span><br>
-                  <span style="font-size:10px">3. Cars are racing down a narrow road.</span><br>
-                  <span style="font-size:10px">4. A race car races along a track.</span><br>
-                  <span style="font-size:10px">5. A car is drifting in a fast speed.</span>
-                </div>
-                <div class="col-md-4">
-                  <img src="/static/img/image6.gif" width="100%" height="170px">
-                  <span style="font-size:10px">1. A player is putting the basketball into the post from distance.</span><br>
-                  <span style="font-size:10px">2. The player makes a three-pointer.</span><br>
-                  <span style="font-size:10px">3. People are playing basketball.</span><br>
-                  <span style="font-size:10px">4. A 3 point shot by someone in a basketball race.</span><br>
-                  <span style="font-size:10px">5. A basketball team is playing in front of speculators.</span>
+                  </div>
+                  <div class="col-md-4">
+                    <img src="/static/img/image4.gif" width="100%" height="170px">
+                    <span style="font-size:10px">1. A man and a woman performing a musical.</span><br>
+                    <span style="font-size:10px">2. A teenage couple perform in an amateur musical.</span><br>
+                    <span style="font-size:10px">3. Dancers are playing a routine.</span><br>
+                    <span style="font-size:10px">4. People are dancing in a musical.</span><br>
+                    <span style="font-size:10px">5. Some people are acting and singing for performance.</span>
+                  </div>
+                  <div class="col-md-4">
+                    <img src="/static/img/image5.gif" width="100%" height="170px">
+                    <span style="font-size:10px">1. A white car is drifting.</span><br>
+                    <span style="font-size:10px">2. Cars racing on a road surrounded by lots of people.</span><br>
+                    <span style="font-size:10px">3. Cars are racing down a narrow road.</span><br>
+                    <span style="font-size:10px">4. A race car races along a track.</span><br>
+                    <span style="font-size:10px">5. A car is drifting in a fast speed.</span>
+                  </div>
+                  <div class="col-md-4">
+                    <img src="/static/img/image6.gif" width="100%" height="170px">
+                    <span style="font-size:10px">1. A player is putting the basketball into the post from distance.</span><br>
+                    <span style="font-size:10px">2. The player makes a three-pointer.</span><br>
+                    <span style="font-size:10px">3. People are playing basketball.</span><br>
+                    <span style="font-size:10px">4. A 3 point shot by someone in a basketball race.</span><br>
+                    <span style="font-size:10px">5. A basketball team is playing in front of speculators.</span>
+                  </div>
                 </div>
               </div>
-              <br>
-              <hr>
+
+              <div id="video_non_overview" style="display:none">
 
               <h3>Challenge</h3>
               <br>
@@ -780,6 +789,7 @@ author={Yingwei Pan and Tao Mei and Ting Yao and Houqiang Li and Yong Rui},
 booktitle={Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
 year={2016}}
               </pre>
+              </div>
                 </div>
               </div>
               
