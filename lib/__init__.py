@@ -18,7 +18,7 @@ def generate_session():
         code = ''.join(map(lambda xx:(hex(ord(xx))[2:]),os.urandom(16)))
     return code
 
-def send_email(member):
+def send_email(member, message):
     # import requests
     # url = 'http://182.92.104.30/mail'
     # data = {
@@ -37,7 +37,7 @@ def send_email(member):
     # res = requests.post(url, data=data)
 
     smtp = smtplib.SMTP('localhost')
-    msg = MIMEText('', 'plain', 'utf-8')
+    msg = MIMEText(message, 'plain', 'utf-8')
     msg['From'] = Header("MS-MULTIMEDIA-CHALLENGE<root@ms-multimedia-challenge.com>", 'utf-8')
     msg['To'] = Header("msravrt@163.com", 'utf-8')
     msg['Subject'] = '[MS-MULTIMEDIA-CHALLENGE Notice]'
@@ -244,18 +244,20 @@ def check_and_send_reset_password_email(challenge_type, team_name, caption_name,
         con.set('session2password:' + code, str(one['_id']))
         con.expire('session2password:' + code, 21600)
 
-        import requests
-        url = 'http://182.92.104.30/mail'
-        data = {
-            'fromuser':'MSChallenge <root@ms-multimedia-challenge.com>',
-            'touser':caption_email,
-            'subject':'[MS Challenge Notice]',
-            'message':'No reply\nClick the following link to reset the password in 30 minutes.\nhttp://ms-multimedia-challenge.com/reset?token=%s&challenge_type=video'%code
-        }
-        res = requests.post(url, data=data)
-        data['touser'] = '13631252971@163.com'
-        res = requests.post(url, data=data)
-        return True
+
+        send_email([caption_email], 'No reply\nClick the following link to reset the password in 30 minutes.\nhttp://ms-multimedia-challenge.com/reset?token=%s&challenge_type=video'%code)
+        # import requests
+        # url = 'http://182.92.104.30/mail'
+        # data = {
+        #     'fromuser':'MSChallenge <root@ms-multimedia-challenge.com>',
+        #     'touser':caption_email,
+        #     'subject':'[MS Challenge Notice]',
+        #     'message':
+        # }
+        # res = requests.post(url, data=data)
+        # data['touser'] = '13631252971@163.com'
+        # res = requests.post(url, data=data)
+        # return True
     else:
         return False
 

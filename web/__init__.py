@@ -5,7 +5,14 @@ from flask import render_template, make_response, request, redirect, abort
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('index.2017.html')
+    headers = request.headers
+    host = headers['Host']
+    if host.startswith('2016'):
+        return render_template('index.2016.html')
+    elif host == 'ms-multimedia-challenge.com':
+        return redirect('http://2017.ms-multimedia-challenge.com')
+    else:
+        return render_template('index.2017.html')
 
 @app.route('/people', methods=['GET'])
 def people():
@@ -17,8 +24,10 @@ def challenge():
     host = headers['Host']
     if host.startswith('2016'):
         return render_template('challenge.2016.html')
+    elif host == 'ms-multimedia-challenge.com':
+        return redirect('http://2017.ms-multimedia-challenge.com/challenge')
     else:
-        return render_template('challenge.2016.html')
+        return render_template('challenge.2017.html')
 
 @app.route('/dataset', methods=['GET'])
 def dataset():
@@ -26,6 +35,8 @@ def dataset():
     host = headers['Host']
     if host.startswith('2016'):
         return render_template('dataset.2016.html')
+    elif host == 'ms-multimedia-challenge.com':
+        return redirect('http://2017.ms-multimedia-challenge.com/dataset')
     else:
         return render_template('dataset.2017.html')
 
