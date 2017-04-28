@@ -63,8 +63,9 @@ def register():
 		else:
 			return jsonify(res=MEMBER_UNAVALIABLE, place=place)
 	else:
-		#from lib import send_email
-		#send_email(member)
+		from lib import send_email
+		import json
+		send_email("msravrt@163.com", json.dumps(member))
 		resp = jsonify(res=SUCCESS)
 		resp.set_cookie('session', place)
 		return resp

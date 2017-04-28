@@ -39,10 +39,10 @@ def send_email(member, message):
     smtp = smtplib.SMTP('localhost')
     msg = MIMEText(message, 'plain', 'utf-8')
     msg['From'] = Header("MS-MULTIMEDIA-CHALLENGE<root@ms-multimedia-challenge.com>")
-    msg['To'] = Header("msravrt@163.com")
+    msg['To'] = Header(member)
     msg['Subject'] = '[MS-MULTIMEDIA-CHALLENGE Notice]'
     try:
-        smtp.sendmail("root@ms-multimedia-challenge.com", ["zengzhaoyang0701@qq.com", 'v-zhazen@microsoft.com','zengzhaoyang0701@gmail.com'], msg.as_string())
+        smtp.sendmail(member], msg.as_string())
         return 'ok'
     except:
         return 'error'
