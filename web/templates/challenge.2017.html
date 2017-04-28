@@ -534,10 +534,14 @@
         $("#video_button").click(function(){
             $("#video_non_overview").fadeOut();
             $("#video_overview").fadeIn();
+            $(this).addClass("active");
+            $("#video_year_2017").removeClass("active");
           });
         $("#video_year_2017").click(function(){
           $("#video_overview").fadeOut();
           $("#video_non_overview").fadeIn();
+          $(this).addClass("active");
+          $("#video_button").removeClass("active");
         });
       });
     </script>
@@ -551,7 +555,7 @@
           </button>
           <a class="navbar-brand" href="/">
             <!-- <img src="http://mscoco.org/static/images/logo.jpg" height="155%"> -->
-            Multimedia
+            ACM Multimedia 2017
           </a>
         </div>
 <div class="collapse navbar-collapse" id="menu">
@@ -581,14 +585,14 @@
             <a id="video_button" class="list-group-item active" style="cursor:pointer">
             Video to Language Challenge
             </a>
-            <div id="video_year">
-              <a class="list-group-item" id="video_year_2017">
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017
-              </a>
-              <a class="list-group-item" href="http://2016.ms-multimedia-challenge.com/challenge">
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016
-              </a>
-            </div>
+
+            <a class="list-group-item" id="video_year_2017">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017
+            </a>
+            <a class="list-group-item" href="http://2016.ms-multimedia-challenge.com/challenge">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016
+            </a>
+
             <a href="#qa" aria-controls="qa" role="tab" data-toggle="tab" class="list-group-item disabled">
             Multimedia Q&amp;A Challenge
             </a>

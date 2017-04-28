@@ -342,10 +342,14 @@
         $("#video_button").click(function(){
             $("#video_non_overview").fadeOut();
             $("#video_overview").fadeIn();
+            $(this).addClass("active");
+            $("#video_year_2016").removeClass("active");
           });
         $("#video_year_2016").click(function(){
           $("#video_overview").fadeOut();
           $("#video_non_overview").fadeIn();
+          $(this).addClass("active");
+          $("#video_button").removeClass("active");
         });
       });
     </script>
@@ -358,8 +362,8 @@
             <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="/">
-            <!-- <img src="http://mscoco.org/static/images/logo.jpg" height="155%"> -->
-            Multimedia
+            <!-- <img src="http://www.acmmm.org/2017/wp-content/uploads/2017/01/logo-200.png"> -->
+            ACM Multimedia 2016
           </a>
         </div>
 <div class="collapse navbar-collapse" id="menu">
@@ -390,14 +394,14 @@
             <a id="video_button" class="list-group-item active" style="cursor:pointer">
             Video to Language Challenge
             </a>
-            <div id="video_year">
-              <a class="list-group-item" href="http://2017.ms-multimedia-challenge.com" aria-controls="video" role="tab" data-toggle="tab">
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017
-              </a>
-              <a class="list-group-item" id="video_year_2016">
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016
-              </a>
-            </div>
+
+            <a class="list-group-item" href="http://2017.ms-multimedia-challenge.com" aria-controls="video" role="tab" data-toggle="tab">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2017
+            </a>
+            <a class="list-group-item" id="video_year_2016">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2016
+            </a>
+
             <a href="#qa" aria-controls="qa" role="tab" data-toggle="tab" class="list-group-item disabled">
             Multimedia Q&amp;A Challenge
             </a>
