@@ -65,7 +65,11 @@ def register():
 	else:
 		from lib import send_email
 		import json
-		send_email("msravrt@163.com", json.dumps(member))
+                msg = "Registration\n"
+                for item in member:
+                    msg += "%s %s %s\n"%(item['name'],item['email'],item['organization'])
+		send_email("tiyao@microsoft.com", msg)
+                print msg
 		resp = jsonify(res=SUCCESS)
 		resp.set_cookie('session', place)
 		return resp

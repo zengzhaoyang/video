@@ -41,8 +41,9 @@ def send_email(member, message):
     msg['From'] = Header("MS-MULTIMEDIA-CHALLENGE<root@ms-multimedia-challenge.com>")
     msg['To'] = Header(member)
     msg['Subject'] = '[MS-MULTIMEDIA-CHALLENGE Notice]'
+    print member
     try:
-        smtp.sendmail(member], msg.as_string())
+        smtp.sendmail("root@ms-multimedia-challenge.com", [member], msg.as_string())
         return 'ok'
     except:
         return 'error'
@@ -244,8 +245,9 @@ def check_and_send_reset_password_email(challenge_type, team_name, caption_name,
         con.set('session2password:' + code, str(one['_id']))
         con.expire('session2password:' + code, 21600)
 
+        print caption_email
 
-        send_email([caption_email], 'No reply\nClick the following link to reset the password in 30 minutes.\nhttp://ms-multimedia-challenge.com/reset?token=%s&challenge_type=video'%code)
+        send_email(caption_email, 'No reply\nClick the following link to reset the password in 30 minutes.\nhttp://ms-multimedia-challenge.com/reset?token=%s&challenge_type=video'%code)
         # import requests
         # url = 'http://182.92.104.30/mail'
         # data = {
