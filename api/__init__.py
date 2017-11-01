@@ -1,7 +1,8 @@
 #-*-coding:utf-8-*-
 
-from flask import Blueprint, request, jsonify, make_response
+from flask import Blueprint, request, jsonify, make_response, send_file, abort
 from config import *
+import os
 
 api = Blueprint('api', __name__)
 
@@ -208,11 +209,29 @@ def submit():
 	import os
 	#os.system("rm tmp/result/%s*"%teamid)
 	f.save('tmp/result/' + filename)
+	os.system("cp tmp/result/%s tmp/result/%s"%(filename, teamid + '.zip'))
 
 	from lib import team_submit
 	team_submit(teamid)
 
 	return jsonify(res=SUCCESS)
+
+@api.route('/submission', methods=['GET'])
+def submission():
+	cookies = request.cookies
+	if not 'session' in cookies:
+		return jsonify(res=NOT_LOGIN)
+	session = cookies['session']
+
+	from lib import get_teamid_by_session
+	teamid = get_teamid_by_session(session)
+	if teamid == None:
+		abort(404)
+	teamid = teamid.replace('&', '_')
+	if os.path.exists("tmp/result/%s.zip"%teamid):
+		return send_file("tmp/result/%s.zip"%teamid)
+	else:
+		abort(404)
 
 @api.route('/submit_report', methods=['POST'])
 def submit_report():
@@ -240,11 +259,29 @@ def submit_report():
 	import os
 	#os.system("rm tmp/report/%s*"%teamid)
 	f.save('tmp/report/' + filename)
+	os.system("cp tmp/report/%s tmp/report/%s"%(filename, teamid + '.pdf'))
 
 	from lib import team_submit_report
 	team_submit_report(teamid)
 
 	return jsonify(res=SUCCESS)
+
+@api.route('/submission_report', methods=['GET'])
+def submission_report():
+	cookies = request.cookies
+	if not 'session' in cookies:
+		return jsonify(res=NOT_LOGIN)
+	session = cookies['session']
+
+	from lib import get_teamid_by_session
+	teamid = get_teamid_by_session(session)
+	if teamid == None:
+		abort(404)
+	teamid = teamid.replace('&', '_')
+	if os.path.exists("tmp/report/%s.pdf"%teamid):
+		return send_file("tmp/report/%s.pdf"%teamid)
+	else:
+		abort(404)
 
 @api.route('/allteam', methods=['GET'])
 def allteam():

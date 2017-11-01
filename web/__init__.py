@@ -2,6 +2,15 @@
 
 from server import app
 from flask import render_template, make_response, request, redirect, abort
+import random
+
+def random_str():
+    seed = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    sa = []
+    for i in range(8):
+        sa.append(random.choice(seed))
+    salt = ''.join(sa)
+    return salt
 
 @app.route('/', methods=['GET'])
 def index():
@@ -13,7 +22,7 @@ def index():
         return redirect('http://ms-multimedia-challenge.com/2017')
     return redirect('/2017')
 
-@app.route('/<year>', methods=['GET'])
+@app.route('/<year>/', methods=['GET'])
 def index_year(year):
     if year != '2016' and year != '2017':
         abort(404)
@@ -49,7 +58,7 @@ def challenge():
 def challenge_year(year):
     if year != '2016' and year != '2017':
         abort(404)
-    return render_template('challenge.%s.html'%year)
+    return render_template('challenge.%s.html'%year, random=random_str())
 
 @app.route('/dataset', methods=['GET'])
 def dataset():
@@ -75,11 +84,11 @@ def leaderboard():
         return redirect('http://ms-multimedia-challenge.com/2016/leaderboard')
     elif host.startswith('2017'):
         return redirect('http://ms-multimedia-challenge.com/2017/leaderboard')
-    return redirect('/2017/dataset')
+    return redirect('/2017/leaderboard')
 
 @app.route('/<year>/leaderboard', methods=['GET'])
 def leaderboard_year(year):
-    if year != '2016':
+    if year != '2016' and year != '2017':
         abort(404)
     return render_template('leaderboard.%s.html'%year)
 
